@@ -5,7 +5,7 @@ import { faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import Button from "../UI/Button";
 const Section = (props) => {
   return (
-    <div className={`section_box ${props.className}`}>
+    <div onClick={props.click} className={`section_box ${props.className}`}>
       <div className="section_title">
         <h1>{props.title}</h1>
       </div>

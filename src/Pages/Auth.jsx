@@ -21,7 +21,7 @@ const Auth = () => {
       // maybe trigger a loading screen
       return;
     }
-    if (user) navigate("/profile");
+    if (user) navigate("/takemeto");
   }, [user, loading]);
 
   return (

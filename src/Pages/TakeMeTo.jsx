@@ -16,6 +16,16 @@ const TakeMeTo = () => {
   const [user, loading, error] = useAuthState(auth);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    
+    if (!user) {
+      console.log("login first")
+      alert("Login first");
+      return navigate("/");
+    }
+
+  }, [])
+
 
   function logoutHandler() {
     logout();
@@ -27,6 +37,18 @@ const TakeMeTo = () => {
     }
   }
 
+  function profileHandler(){
+    return navigate("/profile");
+
+  }
+
+  function tweetsHnadler(){
+    return navigate("/mytweets")
+  }
+
+
+
+
   return (
     <div className="parent animate__animated">
       <Navbar />
@@ -35,11 +57,13 @@ const TakeMeTo = () => {
         <div className="take-me-to">
           <div className="sections_upper">
             <Section
+            click={profileHandler}
               title="profile"
               description="your profile!"
               className="section_profile animate__animated animate__fadeIn"
             />
             <Section
+            click={tweetsHnadler}
               title="tweets"
               description="have a look at your tweets"
               className="section_tweets animate__animated animate__fadeIn "
@@ -51,9 +75,9 @@ const TakeMeTo = () => {
               description="lets go through your posts!"
               className="section_posts animate__animated animate__fadeIn"
             />
-            <button    onClick={logoutHandler} > Logout </button>
+           
              <Section
-          
+          click={logoutHandler}
               title="logout"
               description="see ya!"
               className="section_logout animate__animated animate__fadeIn"

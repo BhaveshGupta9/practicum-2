@@ -72,6 +72,7 @@ const Profile = () => {
 
     if (!user) {
       console.log("login first")
+      alert("Login first");
       return navigate("/");
     }
     else {

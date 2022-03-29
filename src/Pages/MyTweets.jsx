@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./MyTweets.css";
 import Navbar from "../components/GeneralComponents/Navbar";
 import Button from "../components/UI/Button";
@@ -13,9 +13,34 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { faTwitter } from "@fortawesome/free-brands-svg-icons";
 
+import { useNavigate } from "react-router-dom";
+import { auth, db, getDoc, logout, doc, getDocs } from "../firebase";
+import { useAuthState } from "react-firebase-hooks/auth";
+
+
+
 
 const MyTweets = () => {
+
+  const navigate = useNavigate();
+  const [user, loading, error] = useAuthState(auth);
+
   const [tweets, setTweets] = useState([]);
+
+  useEffect(() => {
+    
+    if (!user) {
+      console.log("login first")
+      alert("Login first");
+      return navigate("/");
+    }
+
+  }, [])
+  
+  function homeButtonClick(){
+    return navigate("/takemeto");
+  }
+  
 
   const addTweet = (enteredTweet) => {
     setTweets((prevTweets) => {
@@ -38,7 +63,7 @@ const MyTweets = () => {
       <div className="mytweets_main">
         <div className="mytweets_left_container">
           <div className="mytweets_left_container_buttons">
-            <Button className="my_tweets_button animate__animated animate__fadeIn">
+            <Button onClick={homeButtonClick} className="my_tweets_button animate__animated animate__fadeIn">
               <FontAwesomeIcon icon={faHouse} />
             </Button>
             <Button className="my_tweets_button animate__animated animate__fadeIn">
