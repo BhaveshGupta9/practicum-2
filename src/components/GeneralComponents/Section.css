@@ -1,0 +1,21 @@
+.section_box {
+  height: 10rem;
+  margin: 0.5rem;
+  border-radius: 1rem;
+  padding: 0.70rem;
+  background-color:white ;
+  color:purple;
+}
+
+.section_title,
+.section_description {
+  font-family: "Montserrat", sans-serif;
+}
+
+h1 {
+  font-weight: 400;
+}
+
+p {
+  font-weight: 300;
+}

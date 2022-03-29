@@ -1,25 +1,24 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { Routes, Route} from "react-router-dom";
+import "./App.css";
+import TakeMeTo from "./Pages/TakeMeTo";
+import Auth from "./Pages/Auth";
+import Profile from "./Pages/Profile";
+import MyTweets from "./Pages/MyTweets";
+import MyPosts from "./Pages/MyPosts";
+import Notifications from "./Pages/Notifications";
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Routes>
+    <Route path="/" element={<Auth />} />
+    <Route path="/takemeto" element={<TakeMeTo />} />
+    <Route path="/mytweets" element={<MyTweets />} />
+    <Route path="/profile" element={<Profile />} />
+    <Route path="/myposts" element={<MyPosts />} />
+    <Route path="/notifications" element={<Notifications />} />
+  </Routes>
   );
-}
+};
 
 export default App;
