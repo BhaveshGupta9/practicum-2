@@ -1,28 +1,36 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import "./TakeMeTo.css";
 import Section from "../components/GeneralComponents/Section";
 import Welcome from "../components/GeneralComponents/Welcome";
 import Navbar from "../components/GeneralComponents/Navbar";
 
-import { auth, signInWithGoogle, logout } from "../login";
+import { auth, logout } from "../login";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useNavigate } from "react-router-dom";
+
+import {userData} from ".././apiFunction"; 
+import { AppContext } from ".././context";
 
 
 
 
 const TakeMeTo = () => {
 
-  const [user, loading, error] = useAuthState(auth);
+  const [user] = useAuthState(auth);
   const navigate = useNavigate();
+
+  const { updateProfileInfo } = useContext(AppContext);
+
 
   useEffect(() => {
     
-    if (!user) {
-      console.log("login first")
-      alert("Login first");
-      return navigate("/");
+    async function getUserData() {
+
+      const profile = await userData(user);
+      updateProfileInfo(profile);
     }
+
+    getUserData();
 
   }, [])
 

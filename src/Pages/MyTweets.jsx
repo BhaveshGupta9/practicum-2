@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import "./MyTweets.css";
 import Navbar from "../components/GeneralComponents/Navbar";
 import Button from "../components/UI/Button";
@@ -14,28 +14,37 @@ import {
 import { faTwitter } from "@fortawesome/free-brands-svg-icons";
 
 import { useNavigate } from "react-router-dom";
-import { auth, db, getDoc, logout, doc, getDocs } from "../firebase";
-import { useAuthState } from "react-firebase-hooks/auth";
+// import { auth, 
+  // db, 
+  // getDoc, 
+  // logout, 
+  // doc, 
+  // getDocs,
+//  } from "../firebase";
+// import { useAuthState } from "react-firebase-hooks/auth";
 
+import { AppContext } from ".././context";
 
 
 
 const MyTweets = () => {
 
   const navigate = useNavigate();
-  const [user, loading, error] = useAuthState(auth);
+  // const [user] = useAuthState(auth);
 
   const [tweets, setTweets] = useState([]);
+  const { profile } = useContext(AppContext);
 
-  useEffect(() => {
+
+  // useEffect(() => {
     
-    if (!user) {
-      console.log("login first")
-      alert("Login first");
-      return navigate("/");
-    }
+  //   if (!user) {
+  //     console.log("login first")
+  //     alert("Login first");
+  //     return navigate("/");
+  //   }
 
-  }, [])
+  // }, [])
   
   function homeButtonClick(){
     return navigate("/takemeto");
@@ -82,7 +91,7 @@ const MyTweets = () => {
           <Button className="create_tweet_button">tweet</Button>
         </div>
         <div className="mytweets_middle_container">
-          <CreateTweet onAddTweet={addTweet} />
+          <CreateTweet user = {profile} />
           {tweets.length > 0 &&
             tweets.map((tweet) => (
               <TweetOrPost
