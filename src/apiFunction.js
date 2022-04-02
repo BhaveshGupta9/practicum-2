@@ -14,7 +14,7 @@ import {
 async function userData(user) {
 
     try {
-      console.log(user);
+      // console.log(user);
 
 
       const docRef = doc(db, "profile", user.uid)
@@ -23,7 +23,7 @@ async function userData(user) {
       console.log("user Info ", docSnap.data());
       const docData = docSnap.data();
     //   setUserInfo(docData);
-        console.log("From function ", docData)
+        // console.log("From function ", docData)
         return docData;
     } catch(e){
       console.log(e);

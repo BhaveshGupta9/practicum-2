@@ -49,6 +49,8 @@ const firebaseConfig = {
   const auth = getAuth(app);
   const db = getFirestore(app);
 
+  const dbCollection = app.firestore();
+
 
   export {auth, db , signInWithPopup, GoogleAuthProvider, signOut,query,
     getDocs,
@@ -56,4 +58,5 @@ const firebaseConfig = {
     where,
     setDoc,
     getDoc,
+    dbCollection,
     doc,};
