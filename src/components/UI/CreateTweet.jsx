@@ -5,35 +5,50 @@ import "./CreateTweet.css";
 
 import {
   //  auth, 
-  db, 
+  dbCollection, 
   // getDoc, 
   // logout, 
   // doc, 
   // getDocs,
  } from "../.././firebase";
 
- import { useAuthState } from "react-firebase-hooks/auth";
+//  import { useAuthState } from "react-firebase-hooks/auth";
 
  
 
-const CreateTweet = (props) => {
+const CreateTweet = ({user}) => {
 
   
 
-  const [tweetContent, setTweetContent] = useState("");
-  const [tweetComments, setTweetComments] = useState(0);
-  const [tweetLikes, setTweetLikes] = useState(0);
-  const [tweetRetweets, setTweetRetweets] = useState(0);
+  const [tweetMessage, setTweetMessage] = useState('')
+  // const [tweetImage, setTweetImage] = useState('')
 
-  const handleInputChange = (event) => {
-    setTweetContent(event.target.value);
-  };
+  const sendTweet = e => {
+    e.preventDefault();
 
-  const handleSubmit = (event) => {
-    
+    dbCollection.collection('tweet').add({
+      displayName: user.displayName,
+      userName: user.username,
+      verified: user.verified,
+      tweet: tweetMessage,
+      likes: 0,
+      comments: 0,
+      retweets: 0,
+      id: Math.random().toString(),
+      profileImage: user.profileImage,
+      // image: tweetImage,
 
-    setTweetContent("");
-  };
+    })
+    .then(() => {
+      console.log("Document successfully written!");
+  })
+  .catch((error) => {
+      console.error("Error writing document: ", error);
+  });
+
+    // setTweetImage('')
+    setTweetMessage('')
+  }
 
   return (
     <div>
@@ -45,14 +60,14 @@ const CreateTweet = (props) => {
               placeholder="what's on your mind?"
               rows="6"
               cols="90"
-              value={tweetContent}
-              onChange={handleInputChange}
+              value={tweetMessage}
+              onChange={e => setTweetMessage(e.target.value)}
             />
           </div>
           <div>
             <Button
               type="submit"
-              onClick={handleSubmit}
+              onClick={sendTweet}
               className="addtweet_button"
             >
               tweet

@@ -14,13 +14,16 @@ import {
 import { faTwitter } from "@fortawesome/free-brands-svg-icons";
 
 import { useNavigate } from "react-router-dom";
-// import { auth, 
-  // db, 
+import {
+  //  auth, 
+  db, 
+  dbCollection,
   // getDoc, 
   // logout, 
   // doc, 
   // getDocs,
-//  } from "../firebase";
+  
+ } from "../firebase";
 // import { useAuthState } from "react-firebase-hooks/auth";
 
 import { AppContext } from ".././context";
@@ -36,35 +39,42 @@ const MyTweets = () => {
   const { profile } = useContext(AppContext);
 
 
-  // useEffect(() => {
+  useEffect(() => {
     
-  //   if (!user) {
-  //     console.log("login first")
-  //     alert("Login first");
-  //     return navigate("/");
-  //   }
+    // if (!user) {
+    //   console.log("login first")
+    //   alert("Login first");
+    //   return navigate("/");
+    // }
+ 
+    dbCollection.collection('tweet').onSnapshot(snapshot => (
+      setTweets(snapshot.docs.map(doc => doc.data()))
+    ))
 
-  // }, [])
+    console.log(tweets);
+
+
+  }, [])
   
   function homeButtonClick(){
     return navigate("/takemeto");
   }
   
 
-  const addTweet = (enteredTweet) => {
-    setTweets((prevTweets) => {
-      return [
-        ...prevTweets,
-        {
-          tweet: enteredTweet.tweet,
-          comments: enteredTweet.comments,
-          likes: enteredTweet.likes,
-          retweets: enteredTweet.retweets,
-          id: Math.random().toString(),
-        },
-      ];
-    });
-  };
+  // const addTweet = (enteredTweet) => {
+  //   setTweets((prevTweets) => {
+  //     return [
+  //       ...prevTweets,
+  //       {
+  //         tweet: enteredTweet.tweet,
+  //         comments: enteredTweet.comments,
+  //         likes: enteredTweet.likes,
+  //         retweets: enteredTweet.retweets,
+  //         id: Math.random().toString(),
+  //       },
+  //     ];
+  //   });
+  // };
 
   return (
     <div>
@@ -92,7 +102,22 @@ const MyTweets = () => {
         </div>
         <div className="mytweets_middle_container">
           <CreateTweet user = {profile} />
-          {tweets.length > 0 &&
+
+          {tweets.map((tweet) => (
+            <TweetOrPost
+              key={tweet.id}
+              displayName={tweet.displayName}
+              userName={tweet.userName}
+              comments = {tweet.comments}
+              likes = {tweet.likes}
+              retweets = {tweet.retweets}
+              tweet = {tweet.tweet}
+              verified = {tweet.verified} 
+              profileImage= {tweet.profileImage}
+            />
+          ))}
+
+          {/* {tweets.length > 0 &&
             tweets.map((tweet) => (
               <TweetOrPost
                 key={tweet.id}
@@ -101,7 +126,7 @@ const MyTweets = () => {
                 likes={tweet.likes}
                 retweets={tweet.retweets}
               />
-            ))}
+            ))} */}
         </div>
         <div className="mytweets_right_container"></div>
       </div>
