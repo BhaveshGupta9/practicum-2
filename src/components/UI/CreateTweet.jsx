@@ -3,28 +3,34 @@ import { useState } from "react";
 import Button from "../UI/Button";
 import "./CreateTweet.css";
 
+import {
+  //  auth, 
+  db, 
+  // getDoc, 
+  // logout, 
+  // doc, 
+  // getDocs,
+ } from "../.././firebase";
+
+ import { useAuthState } from "react-firebase-hooks/auth";
+
+ 
+
 const CreateTweet = (props) => {
+
+  
+
   const [tweetContent, setTweetContent] = useState("");
-  const [tweetComments, setTweetComments] = useState("29");
-  const [tweetLikes, setTweetLikes] = useState("29");
-  const [tweetRetweets, setTweetRetweets] = useState("29");
+  const [tweetComments, setTweetComments] = useState(0);
+  const [tweetLikes, setTweetLikes] = useState(0);
+  const [tweetRetweets, setTweetRetweets] = useState(0);
 
   const handleInputChange = (event) => {
     setTweetContent(event.target.value);
   };
 
   const handleSubmit = (event) => {
-    event.preventDefault();
-
-    const tweetData = {
-      tweet: tweetContent,
-      comments: tweetComments,
-      retweets: tweetRetweets,
-      likes: tweetLikes,
-      id: Math.random().toString,
-    };
-
-    props.onAddTweet(tweetData);
+    
 
     setTweetContent("");
   };
