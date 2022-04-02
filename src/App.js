@@ -34,7 +34,7 @@ const App = () => {
   return (
     <AppContext.Provider value={{ profile, updateProfileInfo }}>
       <Routes>
-        <Route path="/" element={  <Auth />} />
+        <Route path="/" element={ user ? <TakeMeTo/> : <Auth />} />
         <Route path="/takemeto" element={ user ? <TakeMeTo /> : <Auth/> } />
         <Route path="/mytweets" element={ user ? <MyTweets /> : <Auth/>} />
         <Route path="/profile" element={ user ?  <Profile /> : <Auth/>} />
