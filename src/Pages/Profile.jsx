@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState , useContext} from "react";
+import React, { Fragment, useEffect, useState, useContext } from "react";
 import "./Profile.css";
 import Navbar from "../components/GeneralComponents/Navbar";
 
@@ -7,85 +7,45 @@ import VerifiedIcon from '@mui/icons-material/Verified';
 // import db from '../firebase'
 
 // import { useNavigate } from "react-router-dom";
-import { auth, db, getDoc,  doc,  } from "../firebase";
+import { auth, db, getDoc, doc, dbCollection } from "../firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 
 import { AppContext } from ".././context";
+import TweetOrPost from "../components/UI/TweetOrPost";
+
+import { userTweets, tweetShow } from ".././apiFunction";
+
+
 
 
 const Profile = () => {
 
 
   const { profile } = useContext(AppContext);
+  const [tweets, setTweets] = useState([]);
 
 
-  // const navigate = useNavigate();
-  // const [user] = useAuthState(auth);
-
-  // const [user, setUser] = useState({})
-
-  // console.log(user);
-
-  // const [userInfo, setUserInfo] = useState({
-    // displayName: "Bhavesh",
-    // userName: "gbhavesh",
-    // verified: true,
-    // profileImage: "https://pbs.twimg.com/profile_images/1401061073357348866/UnoWGpUS_400x400.jpg",
-    // userBio: "I solomnly swear that I'm up to no good.",
-    // numberOfTweets: 4,
-    // followers: 100,
-    // followings: 200
-  // });
-
-
-  // const userInfo = {
-  //   displayName: "Bhavesh",
-  //   userName: "gbhavesh",
-  //   verified: true,
-  //   profileImage: "https://pbs.twimg.com/profile_images/1401061073357348866/UnoWGpUS_400x400.jpg",
-  //   userBio: "I solomnly swear that I'm up to no good.",
-  //   numberOfTweets: 4,
-  //   followers: 100,
-  //   followings: 200
-
-  // }
-
-  // useEffect(() => {
-  //   db.collection('profile').onSnapshot(snapshot => (
-  //     console.log(snapshot.docs)
-  //     // setUser(snapshot.docs.map(doc => doc.data()))
-
-  //   ))
-
-  // }, [])
 
   useEffect(() => {
 
-    // async function userData() {
-    //   try {
-    //     console.log(user);
+    async function getUserTweets() {
+
+      const myTweet = await userTweets(profile.uid);
+      // console.log(myTweet);
 
 
-    //     const docRef = doc(db, "profile", user.uid)
-    //     const docSnap = await getDoc(docRef);
+      myTweet.tweetId.map((tweetid) => {
 
-    //     console.log("user Info ", docSnap.data());
-    //     const docData = docSnap.data();
-    //     setUserInfo(docData);
-    //   } catch(e){
-    //     console.log(e);
-    //   }
-    // };
+        dbCollection.collection('tweet').doc(tweetid).get().then((doc) => {
+          setTweets(prevTweets => [...prevTweets, doc.data()]);
+        })
+      })
 
-    // if (!user) {
-    //   console.log("login first")
-    //   alert("Login first");
-    //   return navigate("/");
-    // }
-    // else {
-      // }
-      
-      // userData();
+    }
+
+    getUserTweets();
+
+
   }, [])
 
   return (
@@ -135,6 +95,20 @@ const Profile = () => {
           </div>
         </div>
       </div>
+
+      {tweets.map((tweet) => (
+        <TweetOrPost
+          key={tweet.id}
+          displayName={tweet.displayName}
+          userName={tweet.userName}
+          comments={tweet.comments}
+          likes={tweet.likes}
+          retweets={tweet.retweets}
+          tweet={tweet.tweet}
+          verified={tweet.verified}
+          profileImage={tweet.profileImage}
+        />
+      ))}
     </Fragment>
   );
 };

@@ -30,4 +30,42 @@ async function userData(user) {
     }
   };
 
-  export { userData };
+
+  async function userTweets(id) {
+
+    try {
+   
+
+
+      const docRef = doc(db, "mytweets", id)
+      const docSnap = await getDoc(docRef);
+
+      // console.log("user tweets ", docSnap.data());
+      const docData = docSnap.data();
+
+        return docData;
+    } catch(e){
+      console.log(e);
+    }
+  };
+
+  async function tweetShow(id) {
+
+    try {
+   
+
+
+      const docRef = doc(db, "tweet", id)
+      const docSnap = await getDoc(docRef);
+
+      // console.log("user tweets ", docSnap.data());
+      const docData = docSnap.data();
+
+        return docData;
+    } catch(e){
+      console.log(e);
+    }
+  };
+
+
+  export { userData, userTweets, tweetShow };

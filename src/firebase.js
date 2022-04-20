@@ -27,6 +27,7 @@ import {
   setDoc,
   getDoc,
   doc,
+   updateDoc, arrayUnion, arrayRemove,
 } from "firebase/firestore";
 
 
@@ -59,4 +60,4 @@ const firebaseConfig = {
     setDoc,
     getDoc,
     dbCollection,
-    doc,};
+    doc , updateDoc, arrayUnion, arrayRemove,};
