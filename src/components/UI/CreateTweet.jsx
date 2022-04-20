@@ -5,26 +5,32 @@ import "./CreateTweet.css";
 
 import {
   //  auth, 
-  dbCollection, 
-  // getDoc, 
+  dbCollection,
+  setDoc,
+
+  getDoc,
   // logout, 
-  // doc, 
+  doc,
+  db,
+  updateDoc, arrayUnion, arrayRemove
   // getDocs,
- } from "../.././firebase";
+} from "../.././firebase";
 
 //  import { useAuthState } from "react-firebase-hooks/auth";
 
- 
 
-const CreateTweet = ({user}) => {
 
-  
+const CreateTweet = ({ user }) => {
+
+
 
   const [tweetMessage, setTweetMessage] = useState('')
   // const [tweetImage, setTweetImage] = useState('')
 
   const sendTweet = e => {
     e.preventDefault();
+
+    // saving tweet to db
 
     dbCollection.collection('tweet').add({
       displayName: user.displayName,
@@ -39,12 +45,39 @@ const CreateTweet = ({user}) => {
       // image: tweetImage,
 
     })
-    .then(() => {
-      console.log("Document successfully written!");
-  })
-  .catch((error) => {
-      console.error("Error writing document: ", error);
-  });
+      .then((docRef) => {
+        console.log("Document successfully written!");
+
+
+        // saving tweetId to Mytweet array collection with Id same as user id
+        const mytweetsRef = doc(db, "mytweets", user.uid);
+        async  function mytweets() {
+
+          const mytweetsSnap = await getDoc(mytweetsRef);
+          if (mytweetsSnap.exists()) {
+            console.log("mytweetsSnap exists");
+            await updateDoc(mytweetsRef, {
+              tweetId: arrayUnion(docRef.id)
+            })
+          } else {
+            console.log("mytweetsSnap does not exists",mytweetsSnap);
+            await setDoc(mytweetsRef, {
+              tweetId: [docRef.id]
+            })
+          }
+        }
+        mytweets();
+        
+
+      })
+      .catch((error) => {
+        console.error("Error writing document: ", error);
+      });
+
+
+
+
+
 
     // setTweetImage('')
     setTweetMessage('')
