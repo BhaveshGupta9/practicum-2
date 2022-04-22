@@ -7,7 +7,7 @@ import VerifiedIcon from '@mui/icons-material/Verified';
 // import db from '../firebase'
 
 // import { useNavigate } from "react-router-dom";
-import { auth, db, getDoc, doc, dbCollection } from "../firebase";
+import { auth, db, getDoc, doc, dbCollection, updateDoc } from "../firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 
 import { AppContext } from ".././context";
@@ -24,6 +24,27 @@ const Profile = () => {
   const { profile } = useContext(AppContext);
   const [tweets, setTweets] = useState([]);
 
+  const [bio, setBio] = useState(profile.userBio);
+  const [editBioField,setEditBioField] = useState(false);
+
+
+  const editButton = () => {
+    setEditBioField(true);
+  }
+
+  const addBio = () => {
+
+    const profileRef = doc(db, "profile", profile.uid);
+
+    async function updateBio() {
+      await updateDoc(profileRef, {
+        userBio: bio
+      })
+    }
+
+    updateBio();
+    setEditBioField(false)
+  }
 
 
   useEffect(() => {
@@ -70,9 +91,18 @@ const Profile = () => {
               </div>
               <div>
                 <p>
-                  <i>{profile.userBio}</i>
-                  <button>Edit</button>
+                  <i>{bio}</i>
+                  <button onClick={editButton} >Edit</button>
                 </p>
+               { editBioField && <div>
+                  <textarea
+                    placeholder="New bio"
+                    rows="1"
+                    cols="40"
+                    value={bio}
+                    onChange={e => setBio(e.target.value)}
+                  /> <button onClick={addBio} >Done</button>
+                </div> }
               </div>
             </div>
           </div>
