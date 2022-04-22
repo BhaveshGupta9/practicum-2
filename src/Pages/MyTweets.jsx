@@ -51,7 +51,7 @@ const MyTweets = () => {
       setTweets(snapshot.docs.map(doc => doc.data()))
     ))
 
-    console.log(tweets);
+    // console.log(tweets);
 
 
   }, [])
@@ -106,6 +106,7 @@ const MyTweets = () => {
           {tweets.map((tweet) => (
             <TweetOrPost
               key={tweet.id}
+              id = {tweet.id}
               displayName={tweet.displayName}
               userName={tweet.userName}
               comments = {tweet.comments}
@@ -114,6 +115,7 @@ const MyTweets = () => {
               tweet = {tweet.tweet}
               verified = {tweet.verified} 
               profileImage= {tweet.profileImage}
+              loginUserId = {profile.uid}
             />
           ))}
 
