@@ -20,7 +20,7 @@ async function userData(user) {
       const docRef = doc(db, "profile", user.uid)
       const docSnap = await getDoc(docRef);
 
-      console.log("user Info ", docSnap.data());
+      // console.log("user Info ", docSnap.data());
       const docData = docSnap.data();
     //   setUserInfo(docData);
         // console.log("From function ", docData)
