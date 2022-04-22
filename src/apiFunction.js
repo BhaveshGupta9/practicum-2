@@ -10,7 +10,7 @@ import {
     //    getDocs,
  } from "./firebase";
 
-
+// send profile
 async function userData(user) {
 
     try {
@@ -31,11 +31,10 @@ async function userData(user) {
   };
 
 
+  // send tweetId array
   async function userTweets(id) {
 
     try {
-   
-
 
       const docRef = doc(db, "mytweets", id)
       const docSnap = await getDoc(docRef);
@@ -49,6 +48,7 @@ async function userData(user) {
     }
   };
 
+  // send tweet 
   async function tweetShow(id) {
 
     try {

@@ -8,10 +8,92 @@ import {
   faHeart,
 } from "@fortawesome/free-solid-svg-icons";
 
+import {
+  //  auth, 
+  dbCollection,
+  setDoc,
+
+  getDoc,
+  // logout, 
+  doc,
+  db,
+  updateDoc, arrayUnion, arrayRemove
+  // getDocs,
+} from "../.././firebase";
+
+
 import VerifiedIcon from '@mui/icons-material/Verified';
 
 
-const TweetOrPost = ({displayName, userName, verified, tweet,comments,likes,retweets, profileImage}) => {
+const TweetOrPost = ({id, displayName, userName, verified, tweet,comments,likes,retweets, profileImage,loginUserId}) => {
+  
+  const likeButton = () =>{
+    console.log("liked", id);
+
+    async  function tweetAdd() {
+        
+      const tweetSnap = await getDoc(tweetRef);
+      
+        await updateDoc(tweetRef, {
+          likes: tweetSnap.data().likes + 1
+        })
+  }
+
+  async  function tweetSub() {
+        
+    const tweetSnap = await getDoc(tweetRef);
+    
+      await updateDoc(tweetRef, {
+        likes: tweetSnap.data().likes - 1
+      })
+}
+    // saving id to like collection under user id
+
+    const mylikesRef = doc(db,"like",loginUserId);
+
+    async  function mylikes() {
+
+      const mylikesSnap = await getDoc(mylikesRef);
+      if (mylikesSnap.exists()) {
+        console.log("mylikesSnap exists");
+
+        // if tweet id is already in like collection then remove it from like collection
+        if (mylikesSnap.data().tweetId.includes(id)) {
+          console.log("already liked");
+          await updateDoc(mylikesRef, {
+            tweetId: arrayRemove(id)
+          })
+          tweetSub();
+
+        } else {
+          console.log("not liked");
+          await updateDoc(mylikesRef, {
+            tweetId: arrayUnion(id)
+          })
+          tweetAdd();
+        }
+        
+      } else {
+        console.log("mylikesSnap does not exists");
+        await setDoc(mylikesRef, {
+          tweetId: [id]
+        })
+        tweetAdd();
+      }
+    }
+
+    mylikes();
+
+    // adding like count in tweet object
+
+    const tweetRef = doc(db,"tweet",id);
+
+    
+
+ 
+
+  }
+  
   return (
     <div>
       <div className="tweetorpost_main animate__animated animate__fadeInUp">
@@ -48,7 +130,7 @@ const TweetOrPost = ({displayName, userName, verified, tweet,comments,likes,retw
             </Button>
           </div>
           <div>
-            <Button className="tworpo_heart">
+            <Button className="tworpo_heart" onClick={likeButton} >
             {likes}  <FontAwesomeIcon icon={faHeart} />
             </Button>
           </div>

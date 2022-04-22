@@ -71,6 +71,7 @@ const Profile = () => {
               <div>
                 <p>
                   <i>{profile.userBio}</i>
+                  <button>Edit</button>
                 </p>
               </div>
             </div>

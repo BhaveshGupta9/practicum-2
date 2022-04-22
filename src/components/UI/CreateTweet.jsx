@@ -32,7 +32,7 @@ const CreateTweet = ({ user }) => {
 
     // saving tweet to db
 
-    dbCollection.collection('tweet').add({
+    var docRef = dbCollection.collection('tweet').add({
       displayName: user.displayName,
       userName: user.username,
       verified: user.verified,
@@ -47,6 +47,12 @@ const CreateTweet = ({ user }) => {
     })
       .then((docRef) => {
         console.log("Document successfully written!");
+
+        // saving tweet document id inside tweet object 
+        
+        docRef.update({
+          id: docRef.id
+        })
 
 
         // saving tweetId to Mytweet array collection with Id same as user id
