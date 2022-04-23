@@ -32,11 +32,14 @@ async function userData(user) {
 
 
   // send tweetId array
-  async function userTweets(id) {
+  async function userTweets(id,searchCollection) {
+
+    console.log("userTweets ", id);
+    console.log("userTweets ", searchCollection);
 
     try {
 
-      const docRef = doc(db, "mytweets", id)
+      const docRef = doc(db, searchCollection, id)
       const docSnap = await getDoc(docRef);
 
       // console.log("user tweets ", docSnap.data());
