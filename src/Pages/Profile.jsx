@@ -20,12 +20,28 @@ import { userTweets, tweetShow } from ".././apiFunction";
 
 const Profile = () => {
 
+  const barOuter = document.querySelector(".bar-outer");
+  const options = document.querySelectorAll(".bar-grey .option");
+  let current = 1;
+  options.forEach((option, i) => (option.index = i + 1));
+  options.forEach(option =>
+    option.addEventListener("click", function () {
+      barOuter.className = "bar-outer";
+      barOuter.classList.add(`pos${option.index}`);
+      if (option.index > current) {
+        barOuter.classList.add("right");
+      } else if (option.index < current) {
+        barOuter.classList.add("left");
+      }
+      current = option.index;
+    }));
+
 
   const { profile } = useContext(AppContext);
   const [tweets, setTweets] = useState([]);
 
   const [bio, setBio] = useState(profile.userBio);
-  const [editBioField,setEditBioField] = useState(false);
+  const [editBioField, setEditBioField] = useState(false);
 
 
   const editButton = () => {
@@ -47,27 +63,53 @@ const Profile = () => {
   }
 
 
-  useEffect(() => {
+  
 
-    async function getUserTweets() {
+  async function getUserTweets(searchCollection) {
 
-      const myTweet = await userTweets(profile.uid);
-      // console.log(myTweet);
+    if(profile.uid && searchCollection){
+
+    
+
+    const myTweet = await userTweets(profile.uid,searchCollection);
+    console.log(myTweet);
+
+    setTweets([]);
+
+     myTweet.tweetId.map((tweetid) => {
 
 
-      myTweet.tweetId.map((tweetid) => {
-
-        dbCollection.collection('tweet').doc(tweetid).get().then((doc) => {
-          setTweets(prevTweets => [...prevTweets, doc.data()]);
-        })
+      dbCollection.collection('tweet').doc(tweetid).get().then((doc) => {
+        setTweets(prevTweets => [...prevTweets, doc.data()]);
       })
-
+      .then (() => {
+        console.log(tweets);
+      })
+      .catch(function (error) {
+        console.log("Error getting documents: ", error);
+      })
+    })
+    } else {
+      console.log("Try going back to takemeto page");
     }
+  }
 
-    getUserTweets();
+  const showMyTweets = () => {  
+      getUserTweets("mytweets");
+  }
 
+  const showLikedTweets = () => {  
+    getUserTweets("like");
+}
+
+
+
+  useEffect(() => {
+    getUserTweets("mytweets");
 
   }, [])
+
+
 
   return (
     <Fragment>
@@ -94,7 +136,7 @@ const Profile = () => {
                   <i>{bio}</i>
                   <button onClick={editButton} >Edit</button>
                 </p>
-               { editBioField && <div>
+                {editBioField && <div>
                   <textarea
                     placeholder="New bio"
                     rows="1"
@@ -102,7 +144,7 @@ const Profile = () => {
                     value={bio}
                     onChange={e => setBio(e.target.value)}
                   /> <button onClick={addBio} >Done</button>
-                </div> }
+                </div>}
               </div>
             </div>
           </div>
@@ -123,6 +165,30 @@ const Profile = () => {
               <h3>{profile.followings}</h3>
               <p>following</p>
             </div>
+          </div>
+        </div>
+      </div>
+      {/* 
+      <div id="btn_cont">
+        <div class="btn">
+          <span>My Tweets</span>
+        </div>
+        <div class="btn">
+          <span>Liked Tweets</span>
+        </div>
+      </div> */}
+
+      <div className="container">
+        <div className="bar bar-grey">
+          <div className="option" onClick={showMyTweets} >My tweets</div>
+          <div className="option"  onClick={showLikedTweets}>Liked Tweets</div>
+       
+        </div>
+        <div className="bar-outer">
+          <div className="bar bar-purple">
+            <div className="option"  onClick={showMyTweets}>My tweets</div>
+            <div className="option"  onClick={showLikedTweets}>Liked Tweets</div>
+            
           </div>
         </div>
       </div>
