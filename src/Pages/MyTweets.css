@@ -63,10 +63,12 @@
 
 .mytweets_middle_container {
   height: 100vh;
-  width: 50%;
+  width: 55%;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
 
 .mytweets_right_container {
   height: 100vh;
-  width: 25%;
+  width: 20%;
 }
