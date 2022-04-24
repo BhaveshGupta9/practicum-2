@@ -94,6 +94,17 @@
 }
 
 
+.tweets-liked-done{
+  width:60%;
+}
+
+
+.selection{
+  margin: 1.5rem;
+  background-color:white !important;
+  border:2px solid purple;
+  border-radius: 1rem;
+}
 
 
 

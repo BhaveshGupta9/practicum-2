@@ -167,18 +167,7 @@ const Profile = () => {
             </div>
           </div>
         </div>
-      </div>
-      {/* 
-      <div id="btn_cont">
-        <div class="btn">
-          <span>My Tweets</span>
-        </div>
-        <div class="btn">
-          <span>Liked Tweets</span>
-        </div>
-      </div> */}
-
-      <div className="container">
+        <div className="container selection">
         <div className="bar bar-grey">
           <div className="option" onClick={showMyTweets} >My tweets</div>
           <div className="option"  onClick={showLikedTweets}>Liked Tweets</div>
@@ -192,7 +181,7 @@ const Profile = () => {
           </div>
         </div>
       </div>
-
+      <div className="tweets-liked-done">
       {tweets.map((tweet) => (
         <TweetOrPost
           key={tweet.id}
@@ -206,6 +195,18 @@ const Profile = () => {
           profileImage={tweet.profileImage}
         />
       ))}
+      </div>
+      {/* 
+      <div id="btn_cont">
+        <div class="btn">
+          <span>My Tweets</span>
+        </div>
+        <div class="btn">
+          <span>Liked Tweets</span>
+        </div>
+      </div> */}
+
+      </div>
     </Fragment>
   );
 };
