@@ -115,7 +115,7 @@ const MyTweets = () => {
               tweet = {tweet.tweet}
               verified = {tweet.verified} 
               profileImage= {tweet.profileImage}
-              loginUserId = {profile.uid}
+              navigateTo = {true}
             />
           ))}
 
