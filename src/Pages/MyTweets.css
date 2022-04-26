@@ -62,7 +62,8 @@
 }
 
 .mytweets_middle_container {
-  height: 100vh;
+  border-radius: 1rem;
+  max-height: 90vh;
   width: 55%;
   overflow-y: scroll;
   overflow-x: hidden;

@@ -1,10 +1,10 @@
 .tweetorpost_main {
-  width: 100%;
+  width: 85%;
   background-color: #FFFFFF;
   border: 1px solid purple;
   height: auto;
   border-radius: 1rem;
-  margin: 1rem 0 1rem 0;
+  margin: 1rem 1rem 1rem 1rem;
   padding: 0.5rem;
   display: flex;
   float: left;
