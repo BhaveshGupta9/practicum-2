@@ -2,7 +2,9 @@
   background-color: purple;
   border-radius: 5rem;
   width: 0.8rem;
+ 
 }
+
 
 ::-webkit-scrollbar-thumb{
   background-color: rgb(255, 0, 255);
