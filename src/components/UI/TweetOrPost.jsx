@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useContext} from "react";
 import "./TweetOrPost.css";
 import Button from "../UI/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -8,11 +8,11 @@ import {
   faHeart,
 } from "@fortawesome/free-solid-svg-icons";
 
+import { AppContext } from "../../context";
+
 import {
   //  auth, 
-  dbCollection,
   setDoc,
-
   getDoc,
   // logout, 
   doc,
@@ -21,37 +21,47 @@ import {
   // getDocs,
 } from "../.././firebase";
 
-
+import CommentBox from "./CommentBox";
 import VerifiedIcon from '@mui/icons-material/Verified';
+import { useNavigate } from "react-router-dom";
 
 
-const TweetOrPost = ({id, displayName, userName, verified, tweet,comments,likes,retweets, profileImage,loginUserId}) => {
-  
-  const likeButton = () =>{
+
+
+const TweetOrPost = ({navigateTo, id, displayName, userName, verified, tweet, comments, likes, retweets, profileImage }) => {
+
+
+  const navigate = useNavigate();
+  const { profile } = useContext(AppContext);
+    
+
+  const [commentBox, setCommentBox] = useState(false);
+
+  const likeButton = (e) => {
     console.log("liked", id);
 
-    async  function tweetAdd() {
-        
-      const tweetSnap = await getDoc(tweetRef);
-      
-        await updateDoc(tweetRef, {
-          likes: tweetSnap.data().likes + 1
-        })
-  }
+    async function tweetAdd() {
 
-  async  function tweetSub() {
-        
-    const tweetSnap = await getDoc(tweetRef);
-    
+      const tweetSnap = await getDoc(tweetRef);
+
+      await updateDoc(tweetRef, {
+        likes: tweetSnap.data().likes + 1
+      })
+    }
+
+    async function tweetSub() {
+
+      const tweetSnap = await getDoc(tweetRef);
+
       await updateDoc(tweetRef, {
         likes: tweetSnap.data().likes - 1
       })
-}
+    }
     // saving id to like collection under user id
 
-    const mylikesRef = doc(db,"like",loginUserId);
+    const mylikesRef = doc(db, "like", profile.uid);
 
-    async  function mylikes() {
+    async function mylikes() {
 
       const mylikesSnap = await getDoc(mylikesRef);
       if (mylikesSnap.exists()) {
@@ -72,7 +82,7 @@ const TweetOrPost = ({id, displayName, userName, verified, tweet,comments,likes,
           })
           tweetAdd();
         }
-        
+
       } else {
         console.log("mylikesSnap does not exists");
         await setDoc(mylikesRef, {
@@ -86,16 +96,43 @@ const TweetOrPost = ({id, displayName, userName, verified, tweet,comments,likes,
 
     // adding like count in tweet object
 
-    const tweetRef = doc(db,"tweet",id);
+    const tweetRef = doc(db, "tweet", id);
 
+    // stop event bubbling
+    if (!e) var e = window.event;
+    e.cancelBubble = true;
+    if (e.stopPropagation) e.stopPropagation();
     
+    
+  }
+  
+  // ******** Comment button
+  function commentButton (e){
+    // console.log("Clicked Comment")
+    setCommentBox(!commentBox);
+    // stop event bubbling
+    if (!e) var e = window.event;
+    e.cancelBubble = true;
+    if (e.stopPropagation) e.stopPropagation();
+  }
 
- 
+  function retweetClicked(e){
+    console.log("retweet clicked")
 
+
+    // stop event bubbling
+    if (!e) var e = window.event;
+    e.cancelBubble = true;
+    if (e.stopPropagation) e.stopPropagation();
+  }
+
+  function divClicked(){
+    if(navigateTo) return navigate("/tweetpage/" + id);
+    
   }
   
   return (
-    <div>
+    <div onClick={divClicked}>
       <div className="tweetorpost_main animate__animated animate__fadeInUp">
         <div className="tweetorpost_upper">
           <div className="tweetorpost_profileImage">
@@ -110,8 +147,8 @@ const TweetOrPost = ({id, displayName, userName, verified, tweet,comments,likes,
           <div className="tweetorpost_content">
             <div>
               <p className="tworpo_name">{displayName} <span className='post--headerSpecial'>
-                        {verified && <VerifiedIcon className='post--badge' color='primary'/> }@{userName}
-                        </span> </p>
+                {verified && <VerifiedIcon className='post--badge' color='primary' />}@{userName}
+              </span> </p>
             </div>
             <div>
               <p>{tweet}</p>
@@ -119,22 +156,26 @@ const TweetOrPost = ({id, displayName, userName, verified, tweet,comments,likes,
           </div>
         </div>
         <div className="tweetorpost_lower">
-          <div>
-            <Button className="tworpo_comment">
-            {comments}  <FontAwesomeIcon icon={faComment} />
+          <div onClick={commentButton}>
+            <Button className="tworpo_comment"  >
+              {comments}  <FontAwesomeIcon icon={faComment} />
             </Button>
           </div>
-          <div>
-            <Button className="tworpo_retweet">
-            {retweets}  <FontAwesomeIcon icon={faRetweet} />
+          <div >
+            <Button className="tworpo_retweet"onClick={retweetClicked} >
+              {retweets}  <FontAwesomeIcon icon={faRetweet} />
             </Button>
           </div>
           <div>
             <Button className="tworpo_heart" onClick={likeButton} >
-            {likes}  <FontAwesomeIcon icon={faHeart} />
+              {likes}  <FontAwesomeIcon icon={faHeart} />
             </Button>
           </div>
         </div>
+        {commentBox && <CommentBox id={Math.random() }          
+          functionCommentButton={commentButton}
+          tweetId={id}
+        />}
       </div>
     </div>
   );

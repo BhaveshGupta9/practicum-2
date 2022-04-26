@@ -7,6 +7,7 @@ import Profile from "./Pages/Profile";
 import MyTweets from "./Pages/MyTweets";
 import MyPosts from "./Pages/MyPosts";
 import Notifications from "./Pages/Notifications";
+import TweetPage from "./components/UI/TweetPage";
 
 import { AppContext } from "./context";
 import { auth,
@@ -40,6 +41,8 @@ const App = () => {
         <Route path="/profile" element={ user ?  <Profile /> : <Auth/>} />
         <Route path="/myposts" element={ user?  <MyPosts />: <Auth/>} />
         <Route path="/notifications" element={ user ?  <Notifications />: <Auth/>} />
+        <Route path="/tweetpage/:id" element={ user ?  <TweetPage />: <Auth/>} />
+
       </Routes>
     </AppContext.Provider>
   );

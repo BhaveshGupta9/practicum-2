@@ -193,6 +193,8 @@ const Profile = () => {
           tweet={tweet.tweet}
           verified={tweet.verified}
           profileImage={tweet.profileImage}
+          navigateTo = {true}
+
         />
       ))}
       </div>
