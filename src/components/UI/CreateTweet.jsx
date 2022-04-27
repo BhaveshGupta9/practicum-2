@@ -12,10 +12,12 @@ import {
   // logout, 
   doc,
   db,
-  updateDoc, arrayUnion, arrayRemove
+  updateDoc, arrayUnion
   // getDocs,
+  ,storage, ref, uploadBytes, getDownloadURL, firebase,increment
 } from "../.././firebase";
 
+// import firebase from "firebase-admin"
 //  import { useAuthState } from "react-firebase-hooks/auth";
 
 
@@ -43,6 +45,7 @@ const CreateTweet = ({ user }) => {
       id: Math.random().toString(),
       profileImage: user.profileImage,
       // image: tweetImage,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
 
     })
       .then((docRef) => {
@@ -54,6 +57,11 @@ const CreateTweet = ({ user }) => {
           id: docRef.id
         })
 
+        // adding number of tweets in profile
+
+        updateDoc(doc(db,"profile",user.uid),{
+          numberOfTweets: increment(1)
+        })
 
         // saving tweetId to Mytweet array collection with Id same as user id
         const mytweetsRef = doc(db, "mytweets", user.uid);

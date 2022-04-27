@@ -4,11 +4,13 @@ import 'firebase/compat/firestore';
 
 // import { initializeApp } from "firebase/app";
 
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+
 import {
     getAuth,
 } from "firebase/auth";
 import {
-    getFirestore,
+    getFirestore, orderBy,increment
 } from "firebase/firestore";
 
 import {
@@ -27,7 +29,7 @@ import {
   setDoc,
   getDoc,
   doc,
-   updateDoc, arrayUnion, arrayRemove,
+   updateDoc, arrayUnion, arrayRemove,onSnapshot,
 } from "firebase/firestore";
 
 
@@ -51,13 +53,14 @@ const firebaseConfig = {
   const db = getFirestore(app);
 
   const dbCollection = app.firestore();
+  const storage = getStorage(app);
 
 
-  export {auth, db , signInWithPopup, GoogleAuthProvider, signOut,query,
+  export {auth, db , signInWithPopup, GoogleAuthProvider, signOut,query,onSnapshot,
     getDocs,
     collection,
     where,
     setDoc,
     getDoc,
     dbCollection,
-    doc , updateDoc, arrayUnion, arrayRemove,};
+    doc , updateDoc, arrayUnion, arrayRemove,ref, uploadBytes,increment, getDownloadURL,firebase,orderBy, storage};
