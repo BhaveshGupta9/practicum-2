@@ -51,7 +51,7 @@ async function userData(user) {
     }
   };
 
-  // send tweet 
+  // get tweet 
   async function tweetShow(id) {
     // console.log("tweet id from api"+id);
     try {

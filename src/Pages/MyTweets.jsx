@@ -16,21 +16,28 @@ import { faTwitter } from "@fortawesome/free-brands-svg-icons";
 import { useNavigate } from "react-router-dom";
 import {
   //  auth, 
-  db, 
-  dbCollection,
-  // getDoc, 
+  db,
+  // dbCollection,
+  getDocs,
   // logout, 
-  // doc, 
+  doc,
   // getDocs,
-  
- } from "../firebase";
+  onSnapshot,
+
+} from "../firebase";
 
 
 import { AppContext } from ".././context";
+import { auth, logout } from "../login";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { collection, orderBy, query } from "firebase/firestore";
+
 
 
 
 const MyTweets = () => {
+
+  const [user] = useAuthState(auth);
 
   const navigate = useNavigate();
   // const [user] = useAuthState(auth);
@@ -40,26 +47,42 @@ const MyTweets = () => {
 
 
   useEffect(() => {
-    
+
     // if (!user) {
     //   console.log("login first")
     //   alert("Login first");
     //   return navigate("/");
     // }
- 
-    dbCollection.collection('tweet').onSnapshot(snapshot => (
-      setTweets(snapshot.docs.map(doc => doc.data()))
-    ))
 
+    async function getAllTweet() {
+
+      //   const docSnap =  onSnapshot(collection(db,"tweet"),orderBy("createdAt","desc"));
+
+      // docSnap.forEach(doc => {
+      //   // console.log(doc.data());
+      //   setTweets(tweets => [...tweets, doc.data()]);
+      // });
+
+      const q = query(collection(db, "tweet"),orderBy("createdAt","desc"));
+      const unsub = onSnapshot(q, (snapshot) => {
+        // console.log("Current data: ", snapshot);
+        setTweets(snapshot.docs.map(doc => doc.data()))
+      });
+    }
+
+    // dbCollection.collection('tweet').onSnapshot(snapshot => (
+    //   setTweets(snapshot.docs.map(doc => doc.data()))
+    // ))
+    getAllTweet();
     // console.log(tweets);
 
 
   }, [])
-  
-  function homeButtonClick(){
+
+  function homeButtonClick() {
     return navigate("/takemeto");
   }
-  
+
 
   // const addTweet = (enteredTweet) => {
   //   setTweets((prevTweets) => {
@@ -75,6 +98,16 @@ const MyTweets = () => {
   //     ];
   //   });
   // };
+
+  // logout handler
+  function logoutHandler() {
+    logout();
+    if (!user) {
+      console.log("logged out")
+      return navigate("/");
+
+    }
+  }
 
   return (
     <div>
@@ -94,28 +127,28 @@ const MyTweets = () => {
             <Button className="my_tweets_button animate__animated animate__fadeIn">
               <FontAwesomeIcon icon={faImages} />
             </Button>
-            <Button className="my_tweets_button animate__animated animate__fadeIn">
+            <Button onClick={logoutHandler} className="my_tweets_button animate__animated animate__fadeIn">
               <FontAwesomeIcon icon={faArrowRightFromBracket} />{" "}
             </Button>
           </div>
           <Button className="create_tweet_button">tweet</Button>
         </div>
         <div className="mytweets_middle_container">
-          <CreateTweet user = {profile} />
+          <CreateTweet user={profile} />
 
           {tweets.map((tweet) => (
             <TweetOrPost
               key={tweet.id}
-              id = {tweet.id}
+              id={tweet.id}
               displayName={tweet.displayName}
               userName={tweet.userName}
-              comments = {tweet.comments}
-              likes = {tweet.likes}
-              retweets = {tweet.retweets}
-              tweet = {tweet.tweet}
-              verified = {tweet.verified} 
-              profileImage= {tweet.profileImage}
-              navigateTo = {true}
+              comments={tweet.comments}
+              likes={tweet.likes}
+              retweets={tweet.retweets}
+              tweet={tweet.tweet}
+              verified={tweet.verified}
+              profileImage={tweet.profileImage}
+              navigateTo={true}
             />
           ))}
 
