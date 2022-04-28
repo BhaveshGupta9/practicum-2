@@ -9,6 +9,7 @@ import MyPosts from "./Pages/MyPosts";
 import Notifications from "./Pages/Notifications";
 import TweetPage from "./components/UI/TweetPage";
 
+
 import { AppContext } from "./context";
 import { auth,
   //  db,
@@ -42,6 +43,8 @@ const App = () => {
         <Route path="/myposts" element={ user?  <MyPosts />: <Auth/>} />
         <Route path="/notifications" element={ user ?  <Notifications />: <Auth/>} />
         <Route path="/tweetpage/:id" element={ user ?  <TweetPage />: <Auth/>} />
+     
+
 
       </Routes>
     </AppContext.Provider>

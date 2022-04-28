@@ -35,12 +35,12 @@ import {
 
 
 const firebaseConfig = {
-    apiKey: "AIzaSyCd-AMCJQlCgArTzLNDBDArEADCb1710wE",
-    authDomain: "practicum-2-c7bca.firebaseapp.com",
-    projectId: "practicum-2-c7bca",
-    storageBucket: "practicum-2-c7bca.appspot.com",
-    messagingSenderId: "534022382787",
-    appId: "1:534022382787:web:84e584bbc6290630bcae76"
+    apiKey: process.env.REACT_APP_APIKEY,
+    authDomain: process.env.REACT_APP_AUTHDOMAIN,
+    projectId: process.env.REACT_APP_PROJECTID,
+    storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
+    messagingSenderId: process.env.REACT_APP_MESSAGE_SENDER_ID,
+    appId: process.env.REACT_APP_APP_ID
   };
 
 

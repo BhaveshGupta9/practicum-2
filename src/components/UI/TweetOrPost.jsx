@@ -24,6 +24,7 @@ import {
 import CommentBox from "./CommentBox";
 import VerifiedIcon from '@mui/icons-material/Verified';
 import { useNavigate } from "react-router-dom";
+import {sendEmailLike} from "../.././email"
 
 
 
@@ -103,6 +104,16 @@ const TweetOrPost = ({navigateTo, id, displayName, userName, verified, tweet, co
     e.cancelBubble = true;
     if (e.stopPropagation) e.stopPropagation();
     
+
+    const emailObj ={
+      user_name : displayName,
+      user_email : userName+"@gmail.com",
+      likeBy : profile.displayName,
+      message: "liked your tweet",
+      tweet: tweet,
+    }
+
+    sendEmailLike(emailObj);
     
   }
   
@@ -132,8 +143,8 @@ const TweetOrPost = ({navigateTo, id, displayName, userName, verified, tweet, co
   }
   
   return (
-    <div onClick={divClicked}>
-      <div className="tweetorpost_main animate__animated animate__fadeInUp">
+    <div >
+      <div onClick={divClicked} className="tweetorpost_main animate__animated animate__fadeInUp">
         <div className="tweetorpost_upper">
           <div className="tweetorpost_profileImage">
             <img
@@ -172,11 +183,15 @@ const TweetOrPost = ({navigateTo, id, displayName, userName, verified, tweet, co
             </Button>
           </div>
         </div>
-        {commentBox && <CommentBox id={Math.random() }          
+      
+      </div>
+      {commentBox && <CommentBox id={Math.random() }          
           functionCommentButton={commentButton}
           tweetId={id}
+          user_name={displayName}
+          user_email={userName}
+          tweet={tweet}
         />}
-      </div>
     </div>
   );
 };
