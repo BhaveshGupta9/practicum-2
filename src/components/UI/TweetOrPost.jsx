@@ -262,7 +262,7 @@ const TweetOrPost = ({ navigateTo,receiverId, id, displayName, userName, verifie
 
     console.log("direct message clicked")
 
-    if(profile.uid!==receiverId){
+    if(profile.uid!=receiverId){
 
       addUserChatRoom(profile.uid,receiverId, profile.username, userName)
     }
