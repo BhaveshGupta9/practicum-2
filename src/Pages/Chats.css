@@ -1,0 +1,13 @@
+.btn-profile{
+    width: 20rem;
+   margin: 1rem;
+   border:1px solid purple; 
+   background-color: white;
+   box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+}
+
+.chat-user{
+    height: auto;
+    width: auto;
+    padding: 1rem 1rem 0 1rem;
+}

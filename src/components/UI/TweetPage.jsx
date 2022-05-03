@@ -1,16 +1,19 @@
-import React, {useEffect, useState} from 'react'
-import { useParams } from 'react-router-dom'
-import {tweetShow, getBy, userDataa} from '../../apiFunction'
-import TweetOrPost from './TweetOrPost';
-import {commentListArray, getComment} from "../../apiFunction"
-import CommentShow from './CommentShow';
+  
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { tweetShow } from "../../apiFunction";
+import TweetOrPost from "./TweetOrPost";
+import { commentListArray, getComment } from "../../apiFunction";
+import CommentShow from "./CommentShow";
+import Navbar from "../GeneralComponents/Navbar";
+import "./TweetPage.css";
 import LikeRetweetBy from './LikeRetweetBy';
 
 
-function TweetPage() {
 
-    const {id} = useParams();
-    
+function TweetPage() {
+  const { id } = useParams();
+
     const [tweet, setTweet] = useState({});
     const [comments, setComments] = useState([]);
     const [likeBy, setLikeBy] = useState([]);
@@ -74,22 +77,40 @@ function TweetPage() {
         <div>
         TweetPage
 
-    <TweetOrPost
-              key={tweet.id}
-              id = {tweet.id}
-              displayName={tweet.displayName}
-              userName={tweet.userName}
-              comments = {tweet.comments}
-              likes = {tweet.likes}
-              retweets = {tweet.retweets}
-              tweet = {tweet.tweet}
-              verified = {tweet.verified} 
-              profileImage= {tweet.profileImage}
-              navigateTo = {false}
-            />
 
-            {comments ? comments.map(comment => (
-            // {comments.map(comment => (
+      if (res) {
+        res.commentId.map((commentId) => {
+          getComment(commentId).then((res) => {
+            //  console.log( res)
+            setComments((prevComments) => [...prevComments, res]);
+          });
+        });
+      } else {
+        setComments(false);
+      }
+    });
+  }, []);
+
+  return (
+    <div className="tweetpage">
+    <Navbar />
+      <div className="main-tweetpage">
+        <TweetOrPost
+          key={tweet.id}
+          id={tweet.id}
+          displayName={tweet.displayName}
+          userName={tweet.userName}
+          comments={tweet.comments}
+          likes={tweet.likes}
+          retweets={tweet.retweets}
+          tweet={tweet.tweet}
+          verified={tweet.verified}
+          profileImage={tweet.profileImage}
+          navigateTo={false}
+        />
+        {comments ? (
+          comments.map((comment) => (
+
                 <div>
                     <h3>Comments</h3>
                 <CommentShow
@@ -135,7 +156,7 @@ function TweetPage() {
 
             </div>
     )
-  
+
 }
 
-export default TweetPage
+export default TweetPage;

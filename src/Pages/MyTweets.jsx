@@ -9,6 +9,7 @@ import {
   faHouse,
   faImages,
   faBell,
+  faMessage,
   faArrowRightFromBracket,
 } from "@fortawesome/free-solid-svg-icons";
 import { faTwitter } from "@fortawesome/free-brands-svg-icons";
@@ -101,7 +102,7 @@ const MyTweets = () => {
               <FontAwesomeIcon icon={faImages} />
             </Button>
             <Button onClick={messageChat} className="my_tweets_button animate__animated animate__fadeIn">
-            <MessageIcon className='post--badge' color='primary' />{" "}
+            <FontAwesomeIcon icon={faMessage} className='post--badge' color='primary' />{" "}
             </Button>
             <Button onClick={logoutHandler} className="my_tweets_button animate__animated animate__fadeIn">
               <FontAwesomeIcon icon={faArrowRightFromBracket} />{" "}

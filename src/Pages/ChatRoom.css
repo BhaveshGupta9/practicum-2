@@ -1,0 +1,36 @@
+.h1, .my-chats{
+    font-family: "Montserrat", sans-serif;
+    font-weight:400;
+    color:purple;
+}
+
+.main-page{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    gap: 2rem;
+}
+
+.my-chat-profile{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    gap:2rem;
+    border: 2px solid purple;
+    background-color:transparent;
+    border-radius: 1rem;
+    box-shadow: rgba(0, 0, 0, 0.5);
+    padding: 1rem;
+
+}
+
+.chatroom{
+    width:80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+
