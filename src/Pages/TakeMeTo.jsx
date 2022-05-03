@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import "./TakeMeTo.css";
 import Section from "../components/GeneralComponents/Section";
 import Welcome from "../components/GeneralComponents/Welcome";
@@ -10,9 +10,6 @@ import { useNavigate } from "react-router-dom";
 
 import { userData } from ".././apiFunction";
 import { AppContext } from ".././context";
-import emailjs from "@emailjs/browser"
-
-
 
 
 const TakeMeTo = () => {
@@ -21,6 +18,8 @@ const TakeMeTo = () => {
   const navigate = useNavigate();
 
   const { updateProfileInfo } = useContext(AppContext);
+
+  const [loading,setloading] = useState(false);
 
 
   useEffect(() => {
@@ -69,7 +68,18 @@ const TakeMeTo = () => {
     return navigate("/mytweets")
   }
 
+  function chatHandler() {
+    return navigate("/chatroom")
+  }
 
+
+  if(loading){
+    return (
+      <div>
+        <h1>Loading...</h1>
+      </div>
+    )
+  }
 
 
   return (
@@ -94,7 +104,8 @@ const TakeMeTo = () => {
           </div>
           <div className="sections_lower">
             <Section
-              title="posts"
+            click={chatHandler}
+              title="chats"
               description="lets go through your posts!"
               className="section_posts animate__animated animate__fadeIn"
             />

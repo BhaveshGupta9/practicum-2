@@ -1,4 +1,4 @@
-import React, {useState, useContext} from "react";
+import React, { useState, useContext } from "react";
 import "./TweetOrPost.css";
 import Button from "../UI/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -7,6 +7,7 @@ import {
   faRetweet,
   faHeart,
 } from "@fortawesome/free-solid-svg-icons";
+import MessageIcon from '@mui/icons-material/Message';
 
 import { AppContext } from "../../context";
 
@@ -21,20 +22,22 @@ import {
   // getDocs,
 } from "../.././firebase";
 
+import {addUserChatRoom} from "../../apiFunction"
+
 import CommentBox from "./CommentBox";
 import VerifiedIcon from '@mui/icons-material/Verified';
 import { useNavigate } from "react-router-dom";
-import {sendEmailLike} from "../.././email"
+import { sendEmailLike } from "../.././email"
 
 
 
 
-const TweetOrPost = ({navigateTo, id, displayName, userName, verified, tweet, comments, likes, retweets, profileImage }) => {
+const TweetOrPost = ({ navigateTo,receiverId, id, displayName, userName, verified, tweet, comments, likes, retweets, profileImage }) => {
 
 
   const navigate = useNavigate();
   const { profile } = useContext(AppContext);
-    
+
 
   const [commentBox, setCommentBox] = useState(false);
 
@@ -103,22 +106,22 @@ const TweetOrPost = ({navigateTo, id, displayName, userName, verified, tweet, co
     if (!e) var e = window.event;
     e.cancelBubble = true;
     if (e.stopPropagation) e.stopPropagation();
-    
 
-    const emailObj ={
-      user_name : displayName,
-      user_email : userName+"@gmail.com",
-      likeBy : profile.displayName,
+
+    const emailObj = {
+      user_name: displayName,
+      user_email: userName + "@gmail.com",
+      likeBy: profile.displayName,
       message: "liked your tweet",
       tweet: tweet,
     }
 
     sendEmailLike(emailObj);
-    
+
   }
-  
+
   // ******** Comment button
-  function commentButton (e){
+  function commentButton(e) {
     // console.log("Clicked Comment")
     setCommentBox(!commentBox);
     // stop event bubbling
@@ -127,7 +130,7 @@ const TweetOrPost = ({navigateTo, id, displayName, userName, verified, tweet, co
     if (e.stopPropagation) e.stopPropagation();
   }
 
-  function retweetClicked(e){
+  function retweetClicked(e) {
     console.log("retweet clicked")
 
 
@@ -137,11 +140,25 @@ const TweetOrPost = ({navigateTo, id, displayName, userName, verified, tweet, co
     if (e.stopPropagation) e.stopPropagation();
   }
 
-  function divClicked(){
-    if(navigateTo) return navigate("/tweetpage/" + id);
-    
+  function directMessage(e) {
+
+    console.log("direct message clicked")
+
+    addUserChatRoom(profile.uid,receiverId, profile.username, userName)
+
+
+    if (!e) var e = window.event;
+    e.cancelBubble = true;
+    if (e.stopPropagation) e.stopPropagation();
   }
-  
+
+
+  function divClicked() {
+    if (navigateTo) return navigate("/tweetpage/" + id);
+
+  }
+
+
   return (
     <div >
       <div onClick={divClicked} className="tweetorpost_main animate__animated animate__fadeInUp">
@@ -173,7 +190,7 @@ const TweetOrPost = ({navigateTo, id, displayName, userName, verified, tweet, co
             </Button>
           </div>
           <div >
-            <Button className="tworpo_retweet"onClick={retweetClicked} >
+            <Button className="tworpo_retweet" onClick={retweetClicked} >
               {retweets}  <FontAwesomeIcon icon={faRetweet} />
             </Button>
           </div>
@@ -182,16 +199,21 @@ const TweetOrPost = ({navigateTo, id, displayName, userName, verified, tweet, co
               {likes}  <FontAwesomeIcon icon={faHeart} />
             </Button>
           </div>
+          <div>
+            <Button className="" onClick={directMessage} >
+              <MessageIcon className='post--badge' color='primary' />
+            </Button>
+          </div>
         </div>
-      
+
       </div>
-      {commentBox && <CommentBox id={Math.random() }          
-          functionCommentButton={commentButton}
-          tweetId={id}
-          user_name={displayName}
-          user_email={userName}
-          tweet={tweet}
-        />}
+      {commentBox && <CommentBox id={Math.random()}
+        functionCommentButton={commentButton}
+        tweetId={id}
+        user_name={displayName}
+        user_email={userName}
+        tweet={tweet}
+      />}
     </div>
   );
 };

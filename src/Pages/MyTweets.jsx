@@ -12,6 +12,8 @@ import {
   faArrowRightFromBracket,
 } from "@fortawesome/free-solid-svg-icons";
 import { faTwitter } from "@fortawesome/free-brands-svg-icons";
+import MessageIcon from '@mui/icons-material/Message';
+
 
 import { useNavigate } from "react-router-dom";
 import {
@@ -48,34 +50,18 @@ const MyTweets = () => {
 
   useEffect(() => {
 
-    // if (!user) {
-    //   console.log("login first")
-    //   alert("Login first");
-    //   return navigate("/");
-    // }
-
     async function getAllTweet() {
-
-      //   const docSnap =  onSnapshot(collection(db,"tweet"),orderBy("createdAt","desc"));
-
-      // docSnap.forEach(doc => {
-      //   // console.log(doc.data());
-      //   setTweets(tweets => [...tweets, doc.data()]);
-      // });
 
       const q = query(collection(db, "tweet"),orderBy("createdAt","desc"));
       const unsub = onSnapshot(q, (snapshot) => {
-        // console.log("Current data: ", snapshot);
+   
         setTweets(snapshot.docs.map(doc => doc.data()))
       });
     }
 
-    // dbCollection.collection('tweet').onSnapshot(snapshot => (
-    //   setTweets(snapshot.docs.map(doc => doc.data()))
-    // ))
-    getAllTweet();
-    // console.log(tweets);
 
+    getAllTweet();
+  
 
   }, [])
 
@@ -83,23 +69,6 @@ const MyTweets = () => {
     return navigate("/takemeto");
   }
 
-
-  // const addTweet = (enteredTweet) => {
-  //   setTweets((prevTweets) => {
-  //     return [
-  //       ...prevTweets,
-  //       {
-  //         tweet: enteredTweet.tweet,
-  //         comments: enteredTweet.comments,
-  //         likes: enteredTweet.likes,
-  //         retweets: enteredTweet.retweets,
-  //         id: Math.random().toString(),
-  //       },
-  //     ];
-  //   });
-  // };
-
-  // logout handler
   function logoutHandler() {
     logout();
     if (!user) {
@@ -107,6 +76,10 @@ const MyTweets = () => {
       return navigate("/");
 
     }
+  }
+
+  function messageChat (){
+    return navigate("/chatroom")
   }
 
   return (
@@ -127,6 +100,9 @@ const MyTweets = () => {
             <Button className="my_tweets_button animate__animated animate__fadeIn">
               <FontAwesomeIcon icon={faImages} />
             </Button>
+            <Button onClick={messageChat} className="my_tweets_button animate__animated animate__fadeIn">
+            <MessageIcon className='post--badge' color='primary' />{" "}
+            </Button>
             <Button onClick={logoutHandler} className="my_tweets_button animate__animated animate__fadeIn">
               <FontAwesomeIcon icon={faArrowRightFromBracket} />{" "}
             </Button>
@@ -139,6 +115,7 @@ const MyTweets = () => {
           {tweets.map((tweet) => (
             <TweetOrPost
               key={tweet.id}
+              receiverId={tweet.uid}
               id={tweet.id}
               displayName={tweet.displayName}
               userName={tweet.userName}
@@ -152,16 +129,7 @@ const MyTweets = () => {
             />
           ))}
 
-          {/* {tweets.length > 0 &&
-            tweets.map((tweet) => (
-              <TweetOrPost
-                key={tweet.id}
-                tweet={tweet.tweet}
-                comments={tweet.comments}
-                likes={tweet.likes}
-                retweets={tweet.retweets}
-              />
-            ))} */}
+        
         </div>
         <div className="mytweets_right_container"></div>
       </div>

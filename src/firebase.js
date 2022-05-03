@@ -24,12 +24,12 @@ import {
 
   query,
   getDocs,
-  collection,
+  collection,addDoc,limit,
   where,
   setDoc,
   getDoc,
   doc,
-   updateDoc, arrayUnion, arrayRemove,onSnapshot,
+   updateDoc, arrayUnion, arrayRemove, onSnapshot ,
 } from "firebase/firestore";
 
 
@@ -62,5 +62,5 @@ const firebaseConfig = {
     where,
     setDoc,
     getDoc,
-    dbCollection,
+    dbCollection,addDoc,limit,
     doc , updateDoc, arrayUnion, arrayRemove,ref, uploadBytes,increment, getDownloadURL,firebase,orderBy, storage};
