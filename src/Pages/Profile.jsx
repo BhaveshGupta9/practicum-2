@@ -102,6 +102,9 @@ const Profile = () => {
     getUserTweets("like");
 }
 
+const  showMyreTweets = () =>{
+  getUserTweets("retweet");
+}
 
 
   useEffect(() => {
@@ -171,15 +174,20 @@ const Profile = () => {
         <div className="bar bar-grey">
           <div className="option" onClick={showMyTweets} >My tweets</div>
           <div className="option"  onClick={showLikedTweets}>Liked Tweets</div>
+          <div className="option"  onClick={showMyreTweets}>Retweets Tweets</div>
+
        
         </div>
         <div className="bar-outer">
           <div className="bar bar-purple">
             <div className="option"  onClick={showMyTweets}>My tweets</div>
             <div className="option"  onClick={showLikedTweets}>Liked Tweets</div>
+          <div className="option"  onClick={showMyreTweets}>Retweets Tweets</div>
+
             
           </div>
         </div>
+        
       </div>
       <div className="tweets-liked-done">
       {tweets.map((tweet) => (

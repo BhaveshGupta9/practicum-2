@@ -132,13 +132,80 @@ const TweetOrPost = ({ navigateTo,receiverId, id, displayName, userName, verifie
   }
 
   function retweetClicked(e) {
-    console.log("retweet clicked")
+    console.log("retweet clicked", id)
 
+    async function retweetAdd() {
+
+      const tweetSnap = await getDoc(tweetRef);
+
+      await updateDoc(tweetRef, {
+        retweets: tweetSnap.data().retweets + 1
+      })
+    }
+
+    async function retweetSub() {
+
+      const tweetSnap = await getDoc(tweetRef);
+
+      await updateDoc(tweetRef, {
+        retweets: tweetSnap.data().retweets - 1
+      })
+    }
+
+    // saving id to retweet collection under user id
+    const myretweetRef = doc(db, "retweet", profile.uid);
+
+    async function myretweets() {
+
+      const myretweetsSnap = await getDoc(myretweetRef);
+      if (myretweetsSnap.exists()) {
+        console.log("mylikesSnap exists");
+
+        // if tweet id is already in like collection then remove it from like collection
+        if (myretweetsSnap.data().tweetId.includes(id)) {
+          console.log("already retweet");
+          await updateDoc(myretweetRef, {
+            tweetId: arrayRemove(id)
+          })
+          retweetSub();
+
+        } else {
+          console.log("not retweet");
+          await updateDoc(myretweetRef, {
+            tweetId: arrayUnion(id)
+          })
+          retweetAdd();
+        }
+
+      } else {
+        console.log("mylikesSnap does not exists");
+        await setDoc(myretweetRef, {
+          tweetId: [id]
+        })
+        retweetAdd();
+      }
+    }
+
+    myretweets();
+
+
+    const tweetRef = doc(db, "tweet", id);
 
     // stop event bubbling
     if (!e) var e = window.event;
     e.cancelBubble = true;
     if (e.stopPropagation) e.stopPropagation();
+
+    const emailObj = {
+      user_name: displayName,
+      user_email: userName + "@gmail.com",
+      likeBy: profile.displayName,
+      message: "retweet your tweet",
+      tweet: tweet,
+    }
+
+    sendEmailLike(emailObj);
+
   }
 
   function directMessage(e) {
@@ -146,7 +213,6 @@ const TweetOrPost = ({ navigateTo,receiverId, id, displayName, userName, verifie
     console.log("direct message clicked")
 
     addUserChatRoom(profile.uid,receiverId, profile.username, userName)
-
 
     if (!e) var e = window.event;
     e.cancelBubble = true;
