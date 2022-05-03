@@ -174,7 +174,7 @@ const  showMyreTweets = () =>{
         <div className="bar bar-grey">
           <div className="option" onClick={showMyTweets} >My tweets</div>
           <div className="option"  onClick={showLikedTweets}>Liked Tweets</div>
-          <div className="option"  onClick={showMyreTweets}>Retweets Tweets</div>
+          <div className="option"  onClick={showMyreTweets}>Retweets </div>
 
        
         </div>
@@ -182,7 +182,7 @@ const  showMyreTweets = () =>{
           <div className="bar bar-purple">
             <div className="option"  onClick={showMyTweets}>My tweets</div>
             <div className="option"  onClick={showLikedTweets}>Liked Tweets</div>
-          <div className="option"  onClick={showMyreTweets}>Retweets Tweets</div>
+          <div className="option"  onClick={showMyreTweets}>Retweets </div>
 
             
           </div>

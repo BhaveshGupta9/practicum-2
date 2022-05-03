@@ -185,8 +185,18 @@ async function addUserChatRoom(userId, receiverId, userName, receiverName) {
       })
       })
   }
-
-
 }
 
-export { userData, userTweets, tweetShow, commentListArray, getComment, getChatroom, addUserChatRoom };
+async function getBy (tweetId,field){
+  const docRef = doc(db,field,tweetId)
+  const docSnap = await getDoc(docRef)
+  if(docSnap.exists()){
+    const arr = docSnap.data().uId;
+    console.log(arr);
+    return arr;
+  } else {
+    return false;
+  }
+}
+
+export { getBy,userData, userTweets, tweetShow, commentListArray, getComment, getChatroom, addUserChatRoom, userDataa };
