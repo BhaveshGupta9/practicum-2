@@ -177,13 +177,12 @@ async function addUserChatRoom(userId, receiverId, userName, receiverName) {
   } else {
     console.log("ChatroomRef2 does not exists");
     await userDataa(receiverId)
-      .then(data => {
-        console.log(data)
-        setDoc(ChatroomRef2, {
-          myprofileimage: data.profileImage,
-          myusername: receiverName,
-          receiverUserName: [userName],
-        })
+    .then(data => {
+      setDoc(ChatroomRef2, {
+        myprofileimage: data.profileImage,
+        myusername: userName,
+        receiverUserName: [receiverName],
+      })
       })
   }
 

@@ -47,10 +47,7 @@ const App = () => {
         <Route path="/tweetpage/:id" element={ user ?  <TweetPage />: <Auth/>} />
         <Route path="/chat/:collect" element={ user ?  <Chat />: <Auth/>} />
         <Route path="/chatroom" element={ user ?  <ChatRoom />: <Auth/>} />
-
      
-
-
       </Routes>
     </AppContext.Provider>
   );
