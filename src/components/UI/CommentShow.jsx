@@ -2,10 +2,11 @@ import React from 'react'
 import VerifiedIcon from '@mui/icons-material/Verified';
 
 import "./TweetOrPost.css";
+import "./CommentShow.css";
 
 function CommentShow({profileImage, displayName, userName, verified, comment}) {
   return (
-    <div>
+    <div className='main-comment'>
                 <div className="tweetorpost_main animate__animated animate__fadeInUp">
                 <div className="tweetorpost_upper">
                   <div className="tweetorpost_profileImage">

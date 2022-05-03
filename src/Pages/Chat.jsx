@@ -1,52 +1,50 @@
-
-import React, { useRef, useState, useContext, useEffect } from 'react'
-import ChatMessage from './ChatMessage';
-import "./Chat.css"
-import { useParams } from 'react-router-dom'
-
+import React, { useRef, useState, useContext, useEffect } from "react";
+import ChatMessage from "./ChatMessage";
+import "./Chat.css";
+import { useParams } from "react-router-dom";
+import Navbar from "../components/GeneralComponents/Navbar";
 
 import {
-  //  auth, 
+  //  auth,
   db,
   dbCollection,
   getDocs,
-  // logout, 
+  // logout,
   doc,
   // getDocs,
   onSnapshot,
-  query, addDoc,
-  collection, orderBy, firebase, limit,
-
+  query,
+  addDoc,
+  collection,
+  orderBy,
+  firebase,
+  limit,
 } from "../firebase";
 import { AppContext } from ".././context";
 
-
 function Chat() {
-
   const { collect } = useParams();
 
   useEffect(() => {
-    console.log(collect)
-  },[])
-
+    console.log(collect);
+  }, []);
 
   const { profile } = useContext(AppContext);
   // console.log(profile)
 
-
-
-
   const [messages, setMessages] = useState([]);
 
-  const q = query(collection(db, "message"+collect), orderBy('createdAt'), limit(25));
+  const q = query(
+    collection(db, "message" + collect),
+    orderBy("createdAt"),
+    limit(25)
+  );
 
-
-  const me = onSnapshot(q, snapshot => {
-    setMessages(snapshot.docs.map(doc => doc.data()));
+  const me = onSnapshot(q, (snapshot) => {
+    setMessages(snapshot.docs.map((doc) => doc.data()));
   });
 
-  const [formValue, setFormValue] = useState('');
-
+  const [formValue, setFormValue] = useState("");
 
   const sendMessage = async (e) => {
     e.preventDefault();
@@ -55,13 +53,12 @@ function Chat() {
     // console.log(uid);
     // console.log(profile)
 
-    console.log(formValue)
-    console.log(profile.uid)
-    console.log(profile.profileImage)
-    console.log(profile.displayName)
+    console.log(formValue);
+    console.log(profile.uid);
+    console.log(profile.profileImage);
+    console.log(profile.displayName);
 
-
-    const dpcRef = await dbCollection.collection('message'+collect).add({
+    const dpcRef = await dbCollection.collection("message" + collect).add({
       text: formValue,
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       uid: profile.uid,
@@ -71,9 +68,8 @@ function Chat() {
 
     // console.log(dpcRef.id);
 
-    setFormValue('');
-
-  }
+    setFormValue("");
+  };
 
   // if(messages.length === 0){
   //   return (
@@ -81,27 +77,42 @@ function Chat() {
   //   )
   // }
 
-  return (<>
-    <div style={{ marginBottom: "50px" }}  >
+  return (
+    <React.Fragment>
+      <Navbar />
+      <div className="main-page">
+        <div>
+          <h1 className="wassup">wassup!</h1>
+        </div>
+        <div className="main">
+          <div style={{ marginBottom: "50px" }}>
+            {messages.length &&
+              messages.map((msg) => (
+                // console.log(msg) &&
+                <ChatMessage
+                  key={msg.createdAt}
+                  message={msg}
+                  last={msg === messages[messages.length - 1]}
+                />
+              ))}
+          </div>
 
-      {messages.length && messages.map(msg =>
+          <form className="formChat" onSubmit={sendMessage}>
+            <input
+              className="inputChat"
+              value={formValue}
+              onChange={(e) => setFormValue(e.target.value)}
+              placeholder="say something nice"
+            />
 
-        // console.log(msg) &&
-        <ChatMessage key={msg.createdAt} message={msg} last={(msg === messages[messages.length - 1])} />)}
-
-
-    </div>
-
-    <form className='formChat' onSubmit={sendMessage}>
-
-      <input className='inputChat' value={formValue} onChange={(e) => setFormValue(e.target.value)} placeholder="say something nice" />
-
-      <button className='s' type="submit" disabled={!formValue}>🕊️</button>
-
-    </form>
-  </>)
+            <button className="s" type="submit" disabled={!formValue}>
+              <p>Send</p>
+            </button>
+          </form>
+        </div>
+      </div>
+    </React.Fragment>
+  );
 }
 
-
-
-export default Chat
+export default Chat;

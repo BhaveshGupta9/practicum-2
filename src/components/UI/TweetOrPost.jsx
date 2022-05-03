@@ -6,6 +6,7 @@ import {
   faComment,
   faRetweet,
   faHeart,
+  faMessage,
 } from "@fortawesome/free-solid-svg-icons";
 import MessageIcon from '@mui/icons-material/Message';
 
@@ -160,7 +161,7 @@ const TweetOrPost = ({ navigateTo,receiverId, id, displayName, userName, verifie
 
 
   return (
-    <div >
+    <div className="tweetpost-main-container" >
       <div onClick={divClicked} className="tweetorpost_main animate__animated animate__fadeInUp">
         <div className="tweetorpost_upper">
           <div className="tweetorpost_profileImage">
@@ -201,7 +202,7 @@ const TweetOrPost = ({ navigateTo,receiverId, id, displayName, userName, verifie
           </div>
           <div>
             <Button className="" onClick={directMessage} >
-              <MessageIcon className='post--badge' color='primary' />
+              <FontAwesomeIcon icon={faMessage} className='post--badge' color='primary' />
             </Button>
           </div>
         </div>
