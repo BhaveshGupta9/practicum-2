@@ -49,6 +49,21 @@ const TweetOrPost = ({ navigateTo,receiverId, id, displayName, userName, verifie
 
       const tweetSnap = await getDoc(tweetRef);
 
+      // save user id to likeBy
+      const likeByRef = doc(db,"likeBy", id)
+      const likeBySnap = await getDoc(likeByRef)
+      if(likeBySnap.exists()){
+        
+        await updateDoc(likeByRef,{
+          uId: arrayUnion(profile.uid)
+        })
+      } else {
+        await setDoc(likeByRef,{
+          uId: [profile.uid]
+        })
+      }
+      
+
       await updateDoc(tweetRef, {
         likes: tweetSnap.data().likes + 1
       })
@@ -57,6 +72,16 @@ const TweetOrPost = ({ navigateTo,receiverId, id, displayName, userName, verifie
     async function tweetSub() {
 
       const tweetSnap = await getDoc(tweetRef);
+
+       // delete user id from likeBy
+       const likeByRef = doc(db,"likeBy", id)
+       const likeBySnap = await getDoc(likeByRef)
+       if(likeBySnap.exists()){
+         
+         await updateDoc(likeByRef,{
+           uId: arrayRemove(profile.uid)
+         })
+       } 
 
       await updateDoc(tweetRef, {
         likes: tweetSnap.data().likes - 1
@@ -138,6 +163,20 @@ const TweetOrPost = ({ navigateTo,receiverId, id, displayName, userName, verifie
 
       const tweetSnap = await getDoc(tweetRef);
 
+      // save user id to retweetBy
+      const retweetByRef = doc(db,"retweetBy", id)
+      const retweetBySnap = await getDoc(retweetByRef)
+      if(retweetBySnap.exists()){
+        
+        await updateDoc(retweetByRef,{
+          uId: arrayUnion(profile.uid)
+        })
+      } else {
+        await setDoc(retweetByRef,{
+          uId: [profile.uid]
+        })
+      }
+
       await updateDoc(tweetRef, {
         retweets: tweetSnap.data().retweets + 1
       })
@@ -146,6 +185,17 @@ const TweetOrPost = ({ navigateTo,receiverId, id, displayName, userName, verifie
     async function retweetSub() {
 
       const tweetSnap = await getDoc(tweetRef);
+
+      // delete user id from retweetBy
+      const retweetByRef = doc(db,"retweetBy", id)
+      const retweetBySnap = await getDoc(retweetByRef)
+      if(retweetBySnap.exists()){
+        
+        await updateDoc(retweetByRef,{
+          uId: arrayRemove(profile.uid)
+        })
+      } 
+
 
       await updateDoc(tweetRef, {
         retweets: tweetSnap.data().retweets - 1
@@ -212,7 +262,11 @@ const TweetOrPost = ({ navigateTo,receiverId, id, displayName, userName, verifie
 
     console.log("direct message clicked")
 
-    addUserChatRoom(profile.uid,receiverId, profile.username, userName)
+    if(profile.uid!==receiverId){
+
+      addUserChatRoom(profile.uid,receiverId, profile.username, userName)
+    }
+
 
     if (!e) var e = window.event;
     e.cancelBubble = true;
@@ -241,6 +295,7 @@ const TweetOrPost = ({ navigateTo,receiverId, id, displayName, userName, verifie
           </div>
           <div className="tweetorpost_content">
             <div>
+
               <p className="tworpo_name">{displayName} <span className='post--headerSpecial'>
                 {verified && <VerifiedIcon className='post--badge' color='primary' />}@{userName}
               </span> </p>
