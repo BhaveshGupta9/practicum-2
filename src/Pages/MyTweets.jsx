@@ -108,7 +108,6 @@ const MyTweets = () => {
               <FontAwesomeIcon icon={faArrowRightFromBracket} />{" "}
             </Button>
           </div>
-          <Button className="create_tweet_button">tweet</Button>
         </div>
         <div className="mytweets_middle_container">
           <CreateTweet user={profile} />
