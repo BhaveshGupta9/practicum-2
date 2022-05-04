@@ -334,7 +334,7 @@ const TweetOrPost = ({ navigateTo, receiverId, id, displayName, userName, verifi
               <p className="tworpo_name">{displayName} <span className='post--headerSpecial'>
                 {verified && <VerifiedIcon className='post--badge' color='primary' />}@{userName}
               </span> </p>
-              {showButton && <Buttonn onClick={followButton} variant="contained">{followed ? "Unfollow" : "Follow"}</Buttonn>
+              {showButton && <Buttonn onClick={followButton} color={followed ?"error": "secondary"} variant="contained">{followed ? "Unfollow" : "Follow"}</Buttonn>
               } </div>
             <div>
               <p>{tweet}</p>

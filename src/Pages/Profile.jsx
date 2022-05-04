@@ -193,6 +193,9 @@ const  showMyreTweets = () =>{
       {tweets.map((tweet) => (
         <TweetOrPost
           key={tweet.id}
+          receiverId={tweet.uid}
+          id={tweet.id}
+
           displayName={tweet.displayName}
           userName={tweet.userName}
           comments={tweet.comments}
