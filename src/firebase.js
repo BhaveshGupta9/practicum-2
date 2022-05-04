@@ -4,7 +4,7 @@ import 'firebase/compat/firestore';
 
 // import { initializeApp } from "firebase/app";
 
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { getStorage,uploadBytesResumable, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 import {
     getAuth,
@@ -63,4 +63,4 @@ const firebaseConfig = {
     setDoc,
     getDoc,
     dbCollection,addDoc,limit,
-    doc , updateDoc, arrayUnion, arrayRemove,ref, uploadBytes,increment, getDownloadURL,firebase,orderBy, storage};
+    doc , updateDoc, arrayUnion,uploadBytesResumable, arrayRemove,ref, uploadBytes,increment, getDownloadURL,firebase,orderBy, storage};

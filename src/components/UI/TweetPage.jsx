@@ -88,6 +88,7 @@ function TweetPage() {
               verified={tweet.verified}
               profileImage={tweet.profileImage}
               navigateTo={false}
+              image={tweet.image}
             />
           </div>
         </div>

@@ -7,7 +7,7 @@ import VerifiedIcon from "@mui/icons-material/Verified";
 // import db from '../firebase'
 
 // import { useNavigate } from "react-router-dom";
-import { auth, db, getDoc, doc, dbCollection, updateDoc } from "../firebase";
+import { auth, db, getDoc, doc, dbCollection, updateDoc,orderBy } from "../firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 
 import { AppContext } from ".././context";
@@ -69,10 +69,11 @@ const Profile = () => {
           .doc(tweetid)
           .get()
           .then((doc) => {
-            setTweets((prevTweets) => [...prevTweets, doc.data()]);
+            setTweets((prevTweets) => [ doc.data(),...prevTweets]);
           })
           .then(() => {
-            console.log(tweets);
+            // console.log(tweets);
+           
           })
           .catch(function (error) {
             console.log("Error getting documents: ", error);
@@ -204,6 +205,7 @@ const Profile = () => {
               verified={tweet.verified}
               profileImage={tweet.profileImage}
               navigateTo={true}
+              image={tweet.image}
             />
           ))}
         </div>
