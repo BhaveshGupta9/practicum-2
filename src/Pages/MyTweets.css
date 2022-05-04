@@ -50,7 +50,7 @@
   height: 3rem;
   width: 10rem;
   transition: background-color 0.5s;
-  background-color:purple;
+  background-color: purple;
   color: #fff;
   margin-right: 6rem;
 }
@@ -67,6 +67,11 @@
   width: 55%;
   overflow-y: scroll;
   overflow-x: hidden;
+  scrollbar-width: none;
+}
+
+.mytweets_middle_container::-webkit-scrollbar {
+  display: none;
 }
 
 .mytweets_right_container {
