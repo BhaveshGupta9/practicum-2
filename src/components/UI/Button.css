@@ -9,4 +9,9 @@ button {
   color: purple;
   float: right;
   cursor: pointer;
+  transition: all 0.8s;
+}
+
+button:hover {
+  transform: translateY(-5px);
 }

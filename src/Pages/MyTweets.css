@@ -16,7 +16,7 @@
 }
 
 .mytweets_left_container_buttons {
-  height: 20rem;
+  height: 24rem;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -27,22 +27,22 @@
 
 .my_tweets_button {
   font-size: 1.25rem;
-  border: 2px solid purple;
   height: 3rem;
   width: 8rem;
-  background-color: white;
+  background-color: #0E2A47;
+  color: white;
   transition: background-color 0.5s;
   display: flex;
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
+  transition: all 0.5s;
 }
 
-.my_tweets_button:hover {
-  background-color: purple;
+/* .my_tweets_button:hover {
+  background-color: #0E2A47;
   color: white;
-  border: 2px solid white;
-}
+} */
 
 .create_tweet_button {
   font-size: 1.25rem;
@@ -64,7 +64,7 @@
 .mytweets_middle_container {
   border-radius: 1rem;
   max-height: 90vh;
-  width: 55%;
+  width: 65%;
   overflow-y: scroll;
   overflow-x: hidden;
   scrollbar-width: none;

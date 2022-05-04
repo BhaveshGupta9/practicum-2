@@ -12,11 +12,10 @@
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
-  background-color: white;
-  border: 1px solid purple;
-  color:purple;
+  background-color: transparent;
+  border: 1px solid #0E2A47;
+  color:white;
   border-radius: 1rem;
-  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
 }
 
 .profile-upper {
@@ -38,10 +37,9 @@
 .profile-image-div {
   height: 10rem;
   width: 25%;
-  border:2px solid purple;
-  background-color: white;
+  background-color: transparent;
   border-radius: 10rem;
-  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+  border:1px solid white;
 }
 
 .profile-image-div:hover{
@@ -60,10 +58,9 @@
   display:flex;
   flex-direction: column;
   align-items: center;
-  border:1px solid purple;
-  background-color: white;
+  border:1px solid #0E2A47;
+  background-color: transparent;
   border-radius: 1rem;
-  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
 }
 
 .profile-no-of-tweets,
@@ -72,15 +69,14 @@
 .profile-no-of-following {
   height: 8rem;
   width: 18%;
-  border:1px solid purple;
-  background-color: white;
+  background-color: transparent;
+  color: #fff;
   border-radius:1rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
-  transition: 0.5s background-color;
+  transition: all 0.5s;
 }
 
 .profile-no-of-tweets:hover,
@@ -88,9 +84,9 @@
 .profile-no-of-followers:hover,
 .profile-no-of-following:hover{
     border:2px solid white;
-    background-color: purple;
     color:white;
     cursor:pointer;
+    transform:translateY(-10px);
 }
 
 
@@ -101,9 +97,9 @@
 
 .selection{
   margin: 1.5rem;
-  background-color:white !important;
-  border:2px solid purple;
+  background-color:transparent !important;
   border-radius: 1rem;
+  color:white;
 }
 
 

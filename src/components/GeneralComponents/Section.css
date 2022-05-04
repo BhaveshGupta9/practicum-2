@@ -3,8 +3,9 @@
   margin: 0.5rem;
   border-radius: 1rem;
   padding: 0.70rem;
-  background-color:white ;
-  color:purple;
+  /* background-color:white ; */
+  border: 1px solid white;
+  color:white;
 }
 
 .section_title,

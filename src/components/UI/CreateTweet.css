@@ -1,16 +1,26 @@
+.create-tweet-parent{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+
 .createtweet_main {
   margin: 1rem 0 3rem 0;
-  width:90%;
+  width: 80%;
 }
 
 .createtweet_textarea {
   font-family: "Montserrat", sans-serif;
-  border: 1px solid purple;
   outline: none;
   padding: 0.5rem;
   border-radius: 1rem;
-  box-shadow: rgba(50, 50, 93, 0.10) 0px 13px 27px -5px,
-    rgba(0, 0, 0, 0.10) 0px 8px 16px -8px;
+  margin-bottom: 0.5rem;
+  background-color: #0E2A47;
+  border: 1px solid purple;
+  color: #FFFFFF;
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+    rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
 }
 
 .addtweet_button {
@@ -22,8 +32,8 @@
   transition: background-color 0.5s;
   background-color: purple;
   color: #fff;
-  box-shadow: rgba(50, 50, 93, 0.10) 0px 13px 27px -5px,
-    rgba(0, 0, 0, 0.10) 0px 8px 16px -8px;
+  box-shadow: rgba(50, 50, 93, 0.1) 0px 13px 27px -5px,
+    rgba(0, 0, 0, 0.1) 0px 8px 16px -8px;
 }
 
 .addtweet_button:hover {

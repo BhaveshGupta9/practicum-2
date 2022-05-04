@@ -99,7 +99,7 @@ const CreateTweet = ({ user }) => {
   }
 
   return (
-    <div>
+    <div className="create-tweet-parent">
       <div className="createtweet_main">
         <form>
           <div>
@@ -107,7 +107,7 @@ const CreateTweet = ({ user }) => {
               className="createtweet_textarea"
               placeholder="what's on your mind?"
               rows="6"
-              cols="90"
+              cols="80"
               value={tweetMessage}
               onChange={e => setTweetMessage(e.target.value)}
             />
