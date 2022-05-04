@@ -2,7 +2,7 @@ import React, { Fragment, useEffect, useState, useContext } from "react";
 import "./Profile.css";
 import Navbar from "../components/GeneralComponents/Navbar";
 
-import VerifiedIcon from '@mui/icons-material/Verified';
+import VerifiedIcon from "@mui/icons-material/Verified";
 
 // import db from '../firebase'
 
@@ -15,16 +15,12 @@ import TweetOrPost from "../components/UI/TweetOrPost";
 
 import { userTweets, tweetShow } from ".././apiFunction";
 
-
-
-
 const Profile = () => {
-
   const barOuter = document.querySelector(".bar-outer");
   const options = document.querySelectorAll(".bar-grey .option");
   let current = 1;
   options.forEach((option, i) => (option.index = i + 1));
-  options.forEach(option =>
+  options.forEach((option) =>
     option.addEventListener("click", function () {
       barOuter.className = "bar-outer";
       barOuter.classList.add(`pos${option.index}`);
@@ -34,8 +30,8 @@ const Profile = () => {
         barOuter.classList.add("left");
       }
       current = option.index;
-    }));
-
+    })
+  );
 
   const { profile } = useContext(AppContext);
   const [tweets, setTweets] = useState([]);
@@ -43,76 +39,65 @@ const Profile = () => {
   const [bio, setBio] = useState(profile.userBio);
   const [editBioField, setEditBioField] = useState(false);
 
-
   const editButton = () => {
     setEditBioField(true);
-  }
+  };
 
   const addBio = () => {
-
     const profileRef = doc(db, "profile", profile.uid);
 
     async function updateBio() {
       await updateDoc(profileRef, {
-        userBio: bio
-      })
+        userBio: bio,
+      });
     }
 
     updateBio();
-    setEditBioField(false)
-  }
-
-
-  
+    setEditBioField(false);
+  };
 
   async function getUserTweets(searchCollection) {
+    if (profile.uid && searchCollection) {
+      const myTweet = await userTweets(profile.uid, searchCollection);
+      console.log(myTweet);
 
-    if(profile.uid && searchCollection){
+      setTweets([]);
 
-    
-
-    const myTweet = await userTweets(profile.uid,searchCollection);
-    console.log(myTweet);
-
-    setTweets([]);
-
-     myTweet.tweetId.map((tweetid) => {
-
-
-      dbCollection.collection('tweet').doc(tweetid).get().then((doc) => {
-        setTweets(prevTweets => [...prevTweets, doc.data()]);
-      })
-      .then (() => {
-        console.log(tweets);
-      })
-      .catch(function (error) {
-        console.log("Error getting documents: ", error);
-      })
-    })
+      myTweet.tweetId.map((tweetid) => {
+        dbCollection
+          .collection("tweet")
+          .doc(tweetid)
+          .get()
+          .then((doc) => {
+            setTweets((prevTweets) => [...prevTweets, doc.data()]);
+          })
+          .then(() => {
+            console.log(tweets);
+          })
+          .catch(function (error) {
+            console.log("Error getting documents: ", error);
+          });
+      });
     } else {
       console.log("Try going back to takemeto page");
     }
   }
 
-  const showMyTweets = () => {  
-      getUserTweets("mytweets");
-  }
+  const showMyTweets = () => {
+    getUserTweets("mytweets");
+  };
 
-  const showLikedTweets = () => {  
+  const showLikedTweets = () => {
     getUserTweets("like");
-}
+  };
 
-const  showMyreTweets = () =>{
-  getUserTweets("retweet");
-}
-
+  const showMyreTweets = () => {
+    getUserTweets("retweet");
+  };
 
   useEffect(() => {
     getUserTweets("mytweets");
-
-  }, [])
-
-
+  }, []);
 
   return (
     <Fragment>
@@ -132,22 +117,30 @@ const  showMyreTweets = () =>{
                 <h2>{profile.displayName}</h2>
               </div>
               <div>
-                <span>@{profile.username} {profile.verified && <VerifiedIcon className='post--badge' color='primary' />}</span>
+                <span>
+                  @{profile.username}{" "}
+                  {profile.verified && (
+                    <VerifiedIcon className="post--badge" color="primary" />
+                  )}
+                </span>
               </div>
               <div>
                 <p>
                   <i>{bio}</i>
-                  <button onClick={editButton} >Edit</button>
+                  <button onClick={editButton}>Edit</button>
                 </p>
-                {editBioField && <div>
-                  <textarea
-                    placeholder="New bio"
-                    rows="1"
-                    cols="40"
-                    value={bio}
-                    onChange={e => setBio(e.target.value)}
-                  /> <button onClick={addBio} >Done</button>
-                </div>}
+                {editBioField && (
+                  <div>
+                    <textarea
+                      placeholder="New bio"
+                      rows="1"
+                      cols="40"
+                      value={bio}
+                      onChange={(e) => setBio(e.target.value)}
+                    />{" "}
+                    <button onClick={addBio}>Done</button>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -171,45 +164,50 @@ const  showMyreTweets = () =>{
           </div>
         </div>
         <div className="container selection">
-        <div className="bar bar-grey">
-          <div className="option" onClick={showMyTweets} >My tweets</div>
-          <div className="option"  onClick={showLikedTweets}>Liked Tweets</div>
-          <div className="option"  onClick={showMyreTweets}>Retweets </div>
-
-       
-        </div>
-        <div className="bar-outer">
-          <div className="bar bar-purple">
-            <div className="option"  onClick={showMyTweets}>My tweets</div>
-            <div className="option"  onClick={showLikedTweets}>Liked Tweets</div>
-          <div className="option"  onClick={showMyreTweets}>Retweets </div>
-
-            
+          <div className="bar bar-grey">
+            <div className="option" onClick={showMyTweets}>
+              My tweets
+            </div>
+            <div className="option" onClick={showLikedTweets}>
+              Liked Tweets
+            </div>
+            <div className="option" onClick={showMyreTweets}>
+              Retweets{" "}
+            </div>
+          </div>
+          <div className="bar-outer">
+            <div className="bar bar-purple">
+              <div className="option" onClick={showMyTweets}>
+                My tweets
+              </div>
+              <div className="option" onClick={showLikedTweets}>
+                Liked Tweets
+              </div>
+              <div className="option" onClick={showMyreTweets}>
+                Retweets{" "}
+              </div>
+            </div>
           </div>
         </div>
-        
-      </div>
-      <div className="tweets-liked-done">
-      {tweets.map((tweet) => (
-        <TweetOrPost
-          key={tweet.id}
-          receiverId={tweet.uid}
-          id={tweet.id}
-
-          displayName={tweet.displayName}
-          userName={tweet.userName}
-          comments={tweet.comments}
-          likes={tweet.likes}
-          retweets={tweet.retweets}
-          tweet={tweet.tweet}
-          verified={tweet.verified}
-          profileImage={tweet.profileImage}
-          navigateTo = {true}
-
-        />
-      ))}
-      </div>
-      {/* 
+        <div className="tweets-liked-done">
+          {tweets.map((tweet) => (
+            <TweetOrPost
+              key={tweet.id}
+              receiverId={tweet.uid}
+              id={tweet.id}
+              displayName={tweet.displayName}
+              userName={tweet.userName}
+              comments={tweet.comments}
+              likes={tweet.likes}
+              retweets={tweet.retweets}
+              tweet={tweet.tweet}
+              verified={tweet.verified}
+              profileImage={tweet.profileImage}
+              navigateTo={true}
+            />
+          ))}
+        </div>
+        {/* 
       <div id="btn_cont">
         <div class="btn">
           <span>My Tweets</span>
@@ -218,7 +216,6 @@ const  showMyreTweets = () =>{
           <span>Liked Tweets</span>
         </div>
       </div> */}
-
       </div>
     </Fragment>
   );

@@ -106,7 +106,7 @@ const TakeMeTo = () => {
             <Section
             click={chatHandler}
               title="chats"
-              description="lets go through your posts!"
+              description="bring up your chats!"
               className="section_posts animate__animated animate__fadeIn"
             />
 

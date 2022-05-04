@@ -49,10 +49,13 @@ function ChatRoom() {
               src={chatrooms.myprofileimage}
               height="50px"
               width="50px"
+              className="profile-pic-chatroom"
             />{" "}
             <span> {chatrooms.myusername}</span>
           </div>
-          <div><h1 className="my-chats">My Chats</h1></div>
+          <div>
+            <h1 className="my-chats">My Chats</h1>
+          </div>
           {chatrooms.receiverUserName.map((rec) => {
             return <Chats key={rec} receiver={rec} sender={profile.username} />;
           })}

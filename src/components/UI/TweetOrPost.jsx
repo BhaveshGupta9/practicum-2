@@ -358,7 +358,7 @@ const TweetOrPost = ({ navigateTo, receiverId, id, displayName, userName, verifi
             </Button>
           </div>
           {showButton && <div>
-            <Button className="" onClick={directMessage} >
+            <Button className="tworpo_message" onClick={directMessage} >
               <FontAwesomeIcon icon={faMessage} className='post--badge' color='primary' />
             </Button>
           </div>} 

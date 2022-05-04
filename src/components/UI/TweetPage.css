@@ -1,36 +1,78 @@
-.tweetpage{
-    width:100%;
-    display:flex;
-    flex-direction:column;
-    justify-content:space-around;
-    align-items:center;
+.parent-tp {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+.tweetpage {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
 }
 
-.main-tweetpage{
-    width:80%;
-    display:flex;
-    flex-direction:column;
-    justify-content:space-around;
-    align-items:center;
+.main-tweetpage {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
 }
 
 .commentDiv {
-    display:flex;
-flex-direction:column;
-justify-content:space-around;
-align-items:center;
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
 }
 
-.likeDiv{
-    display:flex;
-flex-direction:column;
-justify-content:space-around;
-align-items:center;
+.who-liked {
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
 }
 
-.retweetDiv{
-    display:flex;
-flex-direction:column;
-justify-content:space-around;
-align-items:center;
+.likeDiv {
+  color: #fff;
+  border: 1px solid purple;
+  padding: 0.5rem;
+  border-radius: 1rem;
+  margin: 1rem;
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  transition: all 0.5s;
+}
+
+.retweetDiv {
+    color: #fff;
+    border: 1px solid purple;
+    padding: 0.5rem;
+    border-radius: 1rem;
+    margin: 1rem;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    transition: all 0.5s;
+}
+
+.retweeted-by,
+.liked-by {
+  color: #fff;
+}
+
+.likeDiv:hover,
+.retweetDiv:hover {
+  transform: translateX(-5px);
+  border-bottom: 10px solid purple;
 }
