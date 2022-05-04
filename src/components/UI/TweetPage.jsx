@@ -82,6 +82,7 @@ function TweetPage() {
             <div className="tweetpage">
                 <Navbar />
                 <div className="main-tweetpage">
+                    
                     <TweetOrPost
                         key={tweet.id}
                         id={tweet.id}
@@ -100,7 +101,7 @@ function TweetPage() {
                     {comments ? 
                         comments.map((comment) => (
 
-                            <div>
+                            <div className="commentDiv">
                                 <h3>Comments</h3>
                                 <CommentShow
                                     key={comment.id}
@@ -115,7 +116,7 @@ function TweetPage() {
                         )) : <p>No comments</p>}
 
                     {likeBy ? likeBy.map(profile => (
-                        <div>
+                        <div className="likeDiv">
                             <h3>Liked By</h3>
                             <LikeRetweetBy
                                 key={Math.random()}
@@ -129,7 +130,7 @@ function TweetPage() {
                         <p>No Likes</p>}
 
                     {retweetBy ? retweetBy.map(profile => (
-                        <div>
+                        <div className="retweetDiv">
                             <h3>Retweeted By</h3>
                             <LikeRetweetBy
                                 key={Math.random()}

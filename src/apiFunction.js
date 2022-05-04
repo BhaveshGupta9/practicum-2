@@ -1,4 +1,4 @@
-import { arrayUnion, setDoc, updateDoc } from "firebase/firestore";
+import { arrayUnion,arrayRemove, setDoc, updateDoc } from "firebase/firestore";
 import React from "react";
 
 // import { AppContext } from "./context";
@@ -199,4 +199,94 @@ async function getBy (tweetId,field){
   }
 }
 
-export { getBy,userData, userTweets, tweetShow, commentListArray, getComment, getChatroom, addUserChatRoom, userDataa };
+// follow code
+
+async function followAddSub(follow, followBy){
+  const followRef = doc(db, "follow", follow);
+  const followSnap = await getDoc(followRef);
+
+  async function followAdd(){
+    const userDoc = await doc(db, "profile", follow);
+    const userDocSnap = await getDoc(userDoc);
+    await updateDoc(userDoc, {
+      followers: userDocSnap.data().followers + 1
+    })
+
+    const userDoc2 = await doc(db, "profile", followBy);
+    const userDocSnap2 = await getDoc(userDoc2);
+    await updateDoc(userDoc2, {
+      followings: userDocSnap2.data().followings + 1
+    })
+  }
+
+  async function followSub(){
+    const userDoc = await doc(db, "profile", follow);
+    const userDocSnap = await getDoc(userDoc);
+    await updateDoc(userDoc, {
+      followers: userDocSnap.data().followers - 1
+    })
+
+    const userDoc2 = await doc(db, "profile", followBy);
+    const userDocSnap2 = await getDoc(userDoc2);
+    await updateDoc(userDoc2, {
+      followings: userDocSnap2.data().followings - 1
+    })
+  }
+
+  if (followSnap.exists()) {
+    console.log("follow exists");
+    console.log("followSnap ", followSnap.data());
+
+    if(followSnap.data().followBy.includes(followBy)){
+      await updateDoc(followRef, {
+        followBy: arrayRemove(followBy)
+      })
+      await followSub();
+    } else {
+      await updateDoc(followRef, {
+        followBy: arrayUnion(followBy)
+      })
+      await followAdd();
+    }
+
+    
+  } else {
+    console.log("follow does not exists");
+       await setDoc(followRef, {
+          followBy: [followBy],
+          follow: [],
+        })
+        await followAdd();
+  }
+
+  const followRef2 = doc(db, "follow", followBy);
+  const followSnap2 = await getDoc(followRef2);
+
+  if (followSnap2.exists()) {
+    console.log("follow exists");
+    console.log("followSnap2 ", followSnap2.data());
+
+    if(followSnap2.data().follow.includes(follow)){
+      await updateDoc(followRef2, {
+        follow: arrayRemove(follow)
+      })
+      // await followSub();
+    } else {
+      await updateDoc(followRef2, {
+        follow: arrayUnion(follow)
+      })
+      // await followAdd();
+    } 
+  } else {
+    console.log("follow does not exists");
+       await setDoc(followRef2, {
+          follow: [follow],
+          followBy: [],
+        })
+        // await followAdd();
+
+    
+  }
+}
+
+export { getBy, followAddSub, userData, userTweets, tweetShow, commentListArray, getComment, getChatroom, addUserChatRoom, userDataa };

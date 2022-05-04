@@ -13,3 +13,24 @@
     justify-content:space-around;
     align-items:center;
 }
+
+.commentDiv {
+    display:flex;
+flex-direction:column;
+justify-content:space-around;
+align-items:center;
+}
+
+.likeDiv{
+    display:flex;
+flex-direction:column;
+justify-content:space-around;
+align-items:center;
+}
+
+.retweetDiv{
+    display:flex;
+flex-direction:column;
+justify-content:space-around;
+align-items:center;
+}

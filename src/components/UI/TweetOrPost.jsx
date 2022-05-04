@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import "./TweetOrPost.css";
 import Button from "../UI/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -9,6 +9,7 @@ import {
   faMessage,
 } from "@fortawesome/free-solid-svg-icons";
 import MessageIcon from '@mui/icons-material/Message';
+import Buttonn from '@mui/material/Button';
 
 import { AppContext } from "../../context";
 
@@ -23,7 +24,7 @@ import {
   // getDocs,
 } from "../.././firebase";
 
-import {addUserChatRoom} from "../../apiFunction"
+import { addUserChatRoom, followAddSub } from "../../apiFunction"
 
 import CommentBox from "./CommentBox";
 import VerifiedIcon from '@mui/icons-material/Verified';
@@ -33,14 +34,24 @@ import { sendEmailLike } from "../.././email"
 
 
 
-const TweetOrPost = ({ navigateTo,receiverId, id, displayName, userName, verified, tweet, comments, likes, retweets, profileImage }) => {
+const TweetOrPost = ({ navigateTo, receiverId, id, displayName, userName, verified, tweet, comments, likes, retweets, profileImage }) => {
 
 
   const navigate = useNavigate();
   const { profile } = useContext(AppContext);
 
+  useEffect(() => {
+    checkFollow()
+    if (profile.uid == receiverId) {
+      setShowButton(false)
+    }
+  }, [])
+
 
   const [commentBox, setCommentBox] = useState(false);
+  const [followed, setFollowed] = useState(false)
+
+  const [showButton, setShowButton] = useState(true)
 
   const likeButton = (e) => {
     console.log("liked", id);
@@ -50,19 +61,19 @@ const TweetOrPost = ({ navigateTo,receiverId, id, displayName, userName, verifie
       const tweetSnap = await getDoc(tweetRef);
 
       // save user id to likeBy
-      const likeByRef = doc(db,"likeBy", id)
+      const likeByRef = doc(db, "likeBy", id)
       const likeBySnap = await getDoc(likeByRef)
-      if(likeBySnap.exists()){
-        
-        await updateDoc(likeByRef,{
+      if (likeBySnap.exists()) {
+
+        await updateDoc(likeByRef, {
           uId: arrayUnion(profile.uid)
         })
       } else {
-        await setDoc(likeByRef,{
+        await setDoc(likeByRef, {
           uId: [profile.uid]
         })
       }
-      
+
 
       await updateDoc(tweetRef, {
         likes: tweetSnap.data().likes + 1
@@ -73,15 +84,15 @@ const TweetOrPost = ({ navigateTo,receiverId, id, displayName, userName, verifie
 
       const tweetSnap = await getDoc(tweetRef);
 
-       // delete user id from likeBy
-       const likeByRef = doc(db,"likeBy", id)
-       const likeBySnap = await getDoc(likeByRef)
-       if(likeBySnap.exists()){
-         
-         await updateDoc(likeByRef,{
-           uId: arrayRemove(profile.uid)
-         })
-       } 
+      // delete user id from likeBy
+      const likeByRef = doc(db, "likeBy", id)
+      const likeBySnap = await getDoc(likeByRef)
+      if (likeBySnap.exists()) {
+
+        await updateDoc(likeByRef, {
+          uId: arrayRemove(profile.uid)
+        })
+      }
 
       await updateDoc(tweetRef, {
         likes: tweetSnap.data().likes - 1
@@ -164,15 +175,15 @@ const TweetOrPost = ({ navigateTo,receiverId, id, displayName, userName, verifie
       const tweetSnap = await getDoc(tweetRef);
 
       // save user id to retweetBy
-      const retweetByRef = doc(db,"retweetBy", id)
+      const retweetByRef = doc(db, "retweetBy", id)
       const retweetBySnap = await getDoc(retweetByRef)
-      if(retweetBySnap.exists()){
-        
-        await updateDoc(retweetByRef,{
+      if (retweetBySnap.exists()) {
+
+        await updateDoc(retweetByRef, {
           uId: arrayUnion(profile.uid)
         })
       } else {
-        await setDoc(retweetByRef,{
+        await setDoc(retweetByRef, {
           uId: [profile.uid]
         })
       }
@@ -187,14 +198,14 @@ const TweetOrPost = ({ navigateTo,receiverId, id, displayName, userName, verifie
       const tweetSnap = await getDoc(tweetRef);
 
       // delete user id from retweetBy
-      const retweetByRef = doc(db,"retweetBy", id)
+      const retweetByRef = doc(db, "retweetBy", id)
       const retweetBySnap = await getDoc(retweetByRef)
-      if(retweetBySnap.exists()){
-        
-        await updateDoc(retweetByRef,{
+      if (retweetBySnap.exists()) {
+
+        await updateDoc(retweetByRef, {
           uId: arrayRemove(profile.uid)
         })
-      } 
+      }
 
 
       await updateDoc(tweetRef, {
@@ -262,9 +273,9 @@ const TweetOrPost = ({ navigateTo,receiverId, id, displayName, userName, verifie
 
     console.log("direct message clicked")
 
-    if(profile.uid!=receiverId){
+    if (profile.uid != receiverId) {
 
-      addUserChatRoom(profile.uid,receiverId, profile.username, userName)
+      addUserChatRoom(profile.uid, receiverId, profile.username, userName)
     }
 
 
@@ -273,10 +284,34 @@ const TweetOrPost = ({ navigateTo,receiverId, id, displayName, userName, verifie
     if (e.stopPropagation) e.stopPropagation();
   }
 
+  function followButton(e) {
+    console.log("follow button clicked")
+    if (profile.uid != receiverId) {
+      followAddSub(receiverId, profile.uid)
+    }
+
+    if (!e) var e = window.event;
+    e.cancelBubble = true;
+    if (e.stopPropagation) e.stopPropagation();
+  }
 
   function divClicked() {
     if (navigateTo) return navigate("/tweetpage/" + id);
 
+  }
+
+  async function checkFollow() {
+    const docRef = doc(db, "follow", profile.uid);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      console.log(docSnap.data())
+      if (docSnap.data().follow.includes(receiverId)) {
+        setFollowed(true)
+        console.log(followed)
+      }
+    } else {
+      setFollowed(false)
+    }
   }
 
 
@@ -299,7 +334,8 @@ const TweetOrPost = ({ navigateTo,receiverId, id, displayName, userName, verifie
               <p className="tworpo_name">{displayName} <span className='post--headerSpecial'>
                 {verified && <VerifiedIcon className='post--badge' color='primary' />}@{userName}
               </span> </p>
-            </div>
+              {showButton && <Buttonn onClick={followButton} variant="contained">{followed ? "Unfollow" : "Follow"}</Buttonn>
+              } </div>
             <div>
               <p>{tweet}</p>
             </div>
@@ -321,11 +357,11 @@ const TweetOrPost = ({ navigateTo,receiverId, id, displayName, userName, verifie
               {likes}  <FontAwesomeIcon icon={faHeart} />
             </Button>
           </div>
-          <div>
+          {showButton && <div>
             <Button className="" onClick={directMessage} >
               <FontAwesomeIcon icon={faMessage} className='post--badge' color='primary' />
             </Button>
-          </div>
+          </div>} 
         </div>
 
       </div>
