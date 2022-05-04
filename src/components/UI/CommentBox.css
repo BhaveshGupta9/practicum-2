@@ -13,8 +13,8 @@
   }
   
   .addtweet_button {
-    height: 2rem;
-    width: 5rem;
+    height: auto;
+    width: auto;
     font-size: 1rem;
     border-radius: 1rem;
     border: 2px solid purple;

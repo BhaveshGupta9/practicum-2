@@ -1,10 +1,12 @@
-button
-{
-border-radius: 5rem;
-border:none;
-outline: none;
-background-color:white;
-color:purple;
-float:right;
-cursor:pointer;
+button {
+  height: auto;
+  width: auto;
+  padding: 0.5rem;
+  border-radius: 5rem;
+  border: none;
+  outline: none;
+  background-color: white;
+  color: purple;
+  float: right;
+  cursor: pointer;
 }

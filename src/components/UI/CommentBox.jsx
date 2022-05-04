@@ -127,8 +127,7 @@ function CommentBox({ tweetId,user_email,user_name,tweet, functionCommentButton 
               type="submit"
               onClick={sendComment}
               className="addtweet_button"
-            >
-              Add Comment
+            >Add
             </Button>
           </div>
         </form>
