@@ -125,6 +125,7 @@ const MyTweets = () => {
               tweet={tweet.tweet}
               verified={tweet.verified}
               profileImage={tweet.profileImage}
+              image={tweet.image}
               navigateTo={true}
             />
           ))}

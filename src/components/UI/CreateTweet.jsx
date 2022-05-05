@@ -14,7 +14,7 @@ import {
   db,
   updateDoc, arrayUnion
   // getDocs,
-  , storage, ref, uploadBytes, getDownloadURL, firebase, increment
+  , storage, ref, uploadBytesResumable, getDownloadURL, firebase, increment
 } from "../.././firebase";
 
 // import firebase from "firebase-admin"
@@ -27,13 +27,42 @@ const CreateTweet = ({ user }) => {
 
 
   const [tweetMessage, setTweetMessage] = useState('')
-  // const [tweetImage, setTweetImage] = useState('')
+  const [tweetImageUrl, setTweetImage] = useState(null)
+  const [progresspercent, setProgresspercent] = useState(0);
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    const file = e.target[0]?.files[0]
+
+    if (!file) return;
+
+    const storageRef = ref(storage, `tweetImage/${file.name}`);
+    const uploadTask = uploadBytesResumable(storageRef, file);
+
+    uploadTask.on("state_changed",
+      (snapshot) => {
+        const progress =
+          Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+        setProgresspercent(progress);
+      },
+      (error) => {
+        alert(error);
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          setTweetImage(downloadURL)
+        });
+      }
+    );
+  }
+
 
   const sendTweet = e => {
     e.preventDefault();
 
     // saving tweet to db
     if (tweetMessage !== '') {
+      console.log(tweetImageUrl)
       var docRef = dbCollection.collection('tweet').add({
         displayName: user.displayName,
         uid: user.uid,
@@ -45,7 +74,7 @@ const CreateTweet = ({ user }) => {
         retweets: 0,
         id: Math.random().toString(),
         profileImage: user.profileImage,
-        // image: tweetImage,
+        image: tweetImageUrl,
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
 
       })
@@ -96,12 +125,14 @@ const CreateTweet = ({ user }) => {
 
     // setTweetImage('')
     setTweetMessage('')
+    setProgresspercent(0)
+    setTweetImage(null)
   }
 
   return (
     <div className="create-tweet-parent">
       <div className="createtweet_main">
-        <form>
+        <div name="form">
           <div>
             <textarea
               className="createtweet_textarea"
@@ -112,6 +143,22 @@ const CreateTweet = ({ user }) => {
               onChange={e => setTweetMessage(e.target.value)}
             />
           </div>
+
+          <form onSubmit={handleSubmit} className='form'>
+            <input type='file' />
+            <button type='submit'>Upload</button>
+          </form>
+
+          {
+            !tweetImageUrl &&
+            <div className='outerbar'>
+              <div className='innerbar' style={{ width: `${progresspercent}%` }}>{progresspercent}%</div>
+            </div>
+          }
+          {
+            tweetImageUrl &&
+            <img src={tweetImageUrl} alt='uploaded file' height={200} />
+          }
           <div>
             <Button
               type="submit"
@@ -121,7 +168,7 @@ const CreateTweet = ({ user }) => {
               tweet
             </Button>
           </div>
-        </form>
+        </div>
       </div>
     </div>
   );

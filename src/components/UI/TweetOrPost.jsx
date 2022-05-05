@@ -34,7 +34,7 @@ import { sendEmailLike } from "../.././email"
 
 
 
-const TweetOrPost = ({ navigateTo, receiverId, id, displayName, userName, verified, tweet, comments, likes, retweets, profileImage }) => {
+const TweetOrPost = ({image, navigateTo, receiverId, id, displayName, userName, verified, tweet, comments, likes, retweets, profileImage }) => {
 
 
   const navigate = useNavigate();
@@ -339,6 +339,10 @@ const TweetOrPost = ({ navigateTo, receiverId, id, displayName, userName, verifi
             <div>
               <p>{tweet}</p>
             </div>
+            {
+            image &&
+            <img src={image} alt='uploaded file' height={200} />
+          }
           </div>
         </div>
         <div className="tweetorpost_lower">
