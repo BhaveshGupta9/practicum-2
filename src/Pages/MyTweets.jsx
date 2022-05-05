@@ -127,6 +127,7 @@ const MyTweets = () => {
               // profileImage={tweet.profileImage}
               image={tweet.image}
               navigateTo={true}
+              retweetBy={tweet.retweetBy}
             />
           ))}
 

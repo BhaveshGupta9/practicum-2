@@ -20,11 +20,11 @@ import {
   // logout, 
   doc,
   db,
-  updateDoc, arrayUnion, arrayRemove
+  updateDoc, arrayUnion, arrayRemove,firebase
   // getDocs,
 } from "../.././firebase";
 
-import { addUserChatRoom, followAddSub, getProfileImage } from "../../apiFunction"
+import { addUserChatRoom, followAddSub,addTweet, getProfileImage } from "../../apiFunction"
 
 import CommentBox from "./CommentBox";
 import VerifiedIcon from '@mui/icons-material/Verified';
@@ -34,7 +34,7 @@ import { sendEmailLike } from "../.././email"
 
 
 
-const TweetOrPost = ({image, navigateTo, receiverId, id, displayName, userName, verified, tweet, comments, likes, retweets, profileImage }) => {
+const TweetOrPost = ({image,retweetBy, navigateTo, receiverId, id, displayName, userName, verified, tweet, comments, likes, retweets, profileImage }) => {
 
 
   const navigate = useNavigate();
@@ -257,6 +257,26 @@ const TweetOrPost = ({image, navigateTo, receiverId, id, displayName, userName, 
     myretweets();
 
 
+    // retweet add tweet
+
+    const docTweet = {
+      displayName: displayName,
+        uid: receiverId,
+        userName: userName,
+        verified: verified,
+        tweet: tweet,
+        likes: likes,
+        comments: comments,
+        retweets: retweets,
+        id: Math.random().toString(),
+        // profileImage: url,
+        image: image,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        retweetBy: [profile.displayName,profile.username,verified],
+    }
+
+    addTweet(docTweet);
+
     const tweetRef = doc(db, "tweet", id);
 
     // stop event bubbling
@@ -355,10 +375,13 @@ const TweetOrPost = ({image, navigateTo, receiverId, id, displayName, userName, 
           </div>
           <div className="tweetorpost_content">
             <div>
-
+            {retweetBy && (   <p className="tworpo_name"> <i>retweet <FontAwesomeIcon icon={faRetweet} /></i> {retweetBy[0]} <span className='post--headerSpecial'>
+                {retweetBy[2] && <VerifiedIcon className='post--badge' color='primary' />}@{retweetBy[1]}
+              </span> </p> )}
               <p className="tworpo_name">{displayName} <span className='post--headerSpecial'>
                 {verified && <VerifiedIcon className='post--badge' color='primary' />}@{userName}
               </span> </p>
+           
               {showButton && <Buttonn onClick={followButton} color={followed ?"error": "secondary"} variant="contained">{followed ? "Unfollow" : "Follow"}</Buttonn>
               } </div>
             <div>

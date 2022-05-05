@@ -2,8 +2,6 @@ import React from "react";
 import { useState } from "react";
 import Button from "../UI/Button";
 import "./CreateTweet.css";
-
-
 import {
   //  auth, 
   dbCollection,
@@ -17,6 +15,8 @@ import {
   // getDocs,
   , storage, ref, uploadBytesResumable, getDownloadURL, firebase, increment
 } from "../.././firebase";
+
+import { addTweet } from "../../apiFunction";
 
 // import firebase from "firebase-admin"
 //  import { useAuthState } from "react-firebase-hooks/auth";
@@ -65,10 +65,7 @@ const CreateTweet = ({ user }) => {
     // saving tweet to db
     if (tweetMessage !== '') {
       // console.log(tweetImageUrl)
-     
-      
-
-      var docRef = dbCollection.collection('tweet').add({
+      const docTweet = {
         displayName: user.displayName,
         uid: user.uid,
         userName: user.username,
@@ -82,48 +79,10 @@ const CreateTweet = ({ user }) => {
         image: tweetImageUrl,
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
 
-      })
-        .then((docRef) => {
-          // console.log("Document successfully written!");
-
-          // saving tweet document id inside tweet object 
-
-          docRef.update({
-            id: docRef.id
-          })
-
-          // adding number of tweets in profile
-
-          updateDoc(doc(db, "profile", user.uid), {
-            numberOfTweets: increment(1)
-          })
-
-          // saving tweetId to Mytweet array collection with Id same as user id
-          const mytweetsRef = doc(db, "mytweets", user.uid);
-          async function mytweets() {
-
-            const mytweetsSnap = await getDoc(mytweetsRef);
-            if (mytweetsSnap.exists()) {
-              // console.log("mytweetsSnap exists");
-              await updateDoc(mytweetsRef, {
-                tweetId: arrayUnion(docRef.id)
-              })
-            } else {
-              // console.log("mytweetsSnap does not exists", mytweetsSnap);
-              await setDoc(mytweetsRef, {
-                tweetId: [docRef.id]
-              })
-            }
-          }
-          mytweets();
+      }
 
 
-        })
-        .catch((error) => {
-          console.error("Error writing document: ", error);
-        });
-
-
+      addTweet(docTweet);
     }
 
 

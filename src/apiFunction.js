@@ -1,5 +1,6 @@
-import { arrayUnion, arrayRemove, setDoc, updateDoc } from "firebase/firestore";
+import { arrayUnion, arrayRemove, setDoc, updateDoc,increment } from "firebase/firestore";
 import React from "react";
+
 
 // import { AppContext } from "./context";
 import {
@@ -7,7 +8,7 @@ import {
   db,
   getDoc,
   //  logout,
-  doc,
+  doc,dbCollection
   //    getDocs,
 } from "./firebase";
 
@@ -301,4 +302,50 @@ async function getProfileImage(id) {
   return docSnap.data();
 }
 
-export { getBy, getProfileImage, followAddSub, userData, userTweets, tweetShow, commentListArray, getComment, getChatroom, addUserChatRoom, userDataa };
+
+// add tweet 
+
+function addTweet (docTweet){
+  var docRef = dbCollection.collection('tweet').add(docTweet)
+    .then((docRef) => {
+      // console.log("Document successfully written!");
+
+      // saving tweet document id inside tweet object 
+
+      docRef.update({
+        id: docRef.id
+      })
+
+      // adding number of tweets in profile
+
+      updateDoc(doc(db, "profile", docTweet.uid), {
+        numberOfTweets: increment(1)
+      })
+
+      // saving tweetId to Mytweet array collection with Id same as user id
+      const mytweetsRef = doc(db, "mytweets", docTweet.uid);
+      async function mytweets() {
+
+        const mytweetsSnap = await getDoc(mytweetsRef);
+        if (mytweetsSnap.exists()) {
+          // console.log("mytweetsSnap exists");
+          await updateDoc(mytweetsRef, {
+            tweetId: arrayUnion(docRef.id)
+          })
+        } else {
+          // console.log("mytweetsSnap does not exists", mytweetsSnap);
+          await setDoc(mytweetsRef, {
+            tweetId: [docRef.id]
+          })
+        }
+      }
+      mytweets();
+
+
+    })
+    .catch((error) => {
+      console.error("Error writing document: ", error);
+    });
+}
+
+export { getBy,addTweet, getProfileImage, followAddSub, userData, userTweets, tweetShow, commentListArray, getComment, getChatroom, addUserChatRoom, userDataa };
