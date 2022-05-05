@@ -1,10 +1,28 @@
-import React from 'react'
+import React,{useState,useEffect} from 'react'
 import VerifiedIcon from '@mui/icons-material/Verified';
 
 import "./TweetOrPost.css";
 import "./CommentShow.css";
 
-function CommentShow({profileImage, displayName, userName, verified, comment}) {
+import {getProfileImage} from "../../apiFunction";
+
+
+function CommentShow({uid, displayName, userName, verified, comment}) {
+  const [url, setUrl] = useState(null);
+
+useEffect(() => {
+  async function image(){
+
+    await getProfileImage(uid).then( data =>{
+      setUrl(data.image)
+     
+      // console.log(data)}
+    })
+    }
+    image();
+}, [])
+
+
   return (
     <div className='main-comment'>
                 <div className="tweetorpost_main animate__animated animate__fadeInUp">
@@ -12,7 +30,7 @@ function CommentShow({profileImage, displayName, userName, verified, comment}) {
                   <div className="tweetorpost_profileImage">
                     <img
                       alt="profile_pic"
-                      src={profileImage}
+                      src={url ? url : "https://cdn.motor1.com/images/mgl/mrz1e/s3/coolest-cars-feature.webp"}
                       height="50px"
                       width="50px"
                       className="tworpo_profilePic"

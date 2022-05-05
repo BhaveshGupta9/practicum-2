@@ -3,11 +3,12 @@ import "./Profile.css";
 import Navbar from "../components/GeneralComponents/Navbar";
 
 import VerifiedIcon from "@mui/icons-material/Verified";
+import EditIcon from '@mui/icons-material/Edit';
 
 // import db from '../firebase'
 
 // import { useNavigate } from "react-router-dom";
-import { auth, db, getDoc, doc, dbCollection, updateDoc,orderBy } from "../firebase";
+import { auth, db, getDoc, doc, dbCollection, updateDoc, storage, uploadBytesResumable, ref, getDownloadURL } from "../firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 
 import { AppContext } from ".././context";
@@ -16,6 +17,8 @@ import TweetOrPost from "../components/UI/TweetOrPost";
 import { userTweets, tweetShow } from ".././apiFunction";
 
 const Profile = () => {
+
+
   const barOuter = document.querySelector(".bar-outer");
   const options = document.querySelectorAll(".bar-grey .option");
   let current = 1;
@@ -33,7 +36,7 @@ const Profile = () => {
     })
   );
 
-  const { profile } = useContext(AppContext);
+  const { profile,profileImg } = useContext(AppContext);
   const [tweets, setTweets] = useState([]);
 
   const [bio, setBio] = useState(profile.userBio);
@@ -59,7 +62,7 @@ const Profile = () => {
   async function getUserTweets(searchCollection) {
     if (profile.uid && searchCollection) {
       const myTweet = await userTweets(profile.uid, searchCollection);
-      console.log(myTweet);
+      // console.log(myTweet);
 
       setTweets([]);
 
@@ -69,11 +72,11 @@ const Profile = () => {
           .doc(tweetid)
           .get()
           .then((doc) => {
-            setTweets((prevTweets) => [ doc.data(),...prevTweets]);
+            setTweets((prevTweets) => [doc.data(), ...prevTweets]);
           })
           .then(() => {
             // console.log(tweets);
-           
+
           })
           .catch(function (error) {
             console.log("Error getting documents: ", error);
@@ -82,6 +85,50 @@ const Profile = () => {
     } else {
       console.log("Try going back to takemeto page");
     }
+  }
+
+
+  const [profileImageUrl, setUrl] = useState(profileImg);
+  const [showEditImage, setShowEditImage] = useState(false);
+  const [progresspercent, setProgresspercent] = useState(0);
+
+
+  function handleProfileImage() {
+    // console.log("profile image");
+
+    setShowEditImage(!showEditImage);
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    const file = e.target[0]?.files[0]
+
+    if (!file) return;
+
+    const storageRef = ref(storage, `profileImage/${profile.uid}`);
+    const uploadTask = uploadBytesResumable(storageRef, file);
+
+    uploadTask.on("state_changed",
+      (snapshot) => {
+        const progress =
+          Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+        setProgresspercent(progress);
+      },
+      (error) => {
+        alert(error);
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          setUrl(downloadURL)
+          const docRef = doc(db, "profileImage", profile.uid);
+          updateDoc(docRef, {
+            image: downloadURL,
+          })
+        });
+      }
+    );
+    setShowEditImage(!showEditImage);
+
   }
 
   const showMyTweets = () => {
@@ -109,10 +156,20 @@ const Profile = () => {
             <div className="profile-image-div">
               <img
                 className="profile-image"
-                src={profile.profileImage}
+                src={profileImageUrl}
                 alt="profile-pic"
               />
+              <EditIcon onClick={handleProfileImage} />
             </div>
+            {showEditImage && (
+              <div> <form onSubmit={handleSubmit} className='form'>
+                <input type='file' />
+                <button type='submit'>Upload</button>
+              </form>
+                <div className='outerbar'>
+                  <div className='innerbar' style={{ width: `${progresspercent}%` }}>{progresspercent}%</div>
+                </div></div>
+            )}
             <div className="profile-name-bio">
               <div>
                 <h2>{profile.displayName}</h2>
@@ -203,7 +260,7 @@ const Profile = () => {
               retweets={tweet.retweets}
               tweet={tweet.tweet}
               verified={tweet.verified}
-              profileImage={tweet.profileImage}
+              // profileImage={tweet.profileImage}
               navigateTo={true}
               image={tweet.image}
             />

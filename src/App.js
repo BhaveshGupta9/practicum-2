@@ -29,14 +29,18 @@ const App = () => {
 
 
   const [profile, updateProfile] = useState({});
+  const [profileImg,updateProfileImg] = useState(null)
 
   function updateProfileInfo(newProfile) {
     updateProfile(newProfile);
   }
 
+  function updateProfileImgFunction(url){
+    updateProfileImg(url);
+  }
 
   return (
-    <AppContext.Provider value={{ profile, updateProfileInfo }}>
+    <AppContext.Provider value={{ profile, updateProfileInfo,profileImg,updateProfileImgFunction }}>
       <Routes>
         <Route path="/" element={ user ? <TakeMeTo/> : <Auth />} />
         <Route path="/takemeto" element={ user ? <TakeMeTo /> : <Auth/> } />

@@ -1,27 +1,32 @@
-import React,{useContext, useEffect} from 'react'
+import React,{useContext, useEffect, useState} from 'react'
 import { AppContext } from ".././context";
 import "./Chat.css"
+import { getProfileImage } from "../apiFunction"
+
 
 
 function ChatMessage(props) {
  
   const { profile } = useContext(AppContext);
-  // useEffect(()=>{
+  const [url,setUrl] = useState(null)
+  const [messageClass, setClass] = useState(props.message.uid === profile.uid ? 'sent' : 'received')
 
-  //   console.log(props.message);
-  // },[]);
-
-    // const { text, uid, profileImage } = messaga.message;
-    // console.log(profile.uid);
-    // console.log(messaga.uid);
+  useEffect(() => {
+    async function image(){
+    await getProfileImage(props.message.uid).then(data=>setUrl(data.image))
+    } 
+    image();
   
-    const messageClass = props.message.uid === profile.uid ? 'sent' : 'received';
+    
+  }, [])
+  
+    
   
     return (<>
       <div className={`message ${messageClass}`}  
         style={{marginBottom: props.last ? '10px' : '0'}}
        >
-        <img className='imgChat' src={props.message.dp } alt="dp" />
+        <img className='imgChat' src={url ? url : "https://cdn.motor1.com/images/mgl/mrz1e/s3/coolest-cars-feature.webp" } alt="dp" />
         {/* <embed>{props.messaga.name}</embed> */}
         <p className='pChat' >{props.message.text}</p>
       </div>
