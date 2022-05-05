@@ -3,6 +3,7 @@ import { useState } from "react";
 import Button from "../UI/Button";
 import "./CreateTweet.css";
 
+
 import {
   //  auth, 
   dbCollection,
@@ -29,6 +30,7 @@ const CreateTweet = ({ user }) => {
   const [tweetMessage, setTweetMessage] = useState('')
   const [tweetImageUrl, setTweetImage] = useState(null)
   const [progresspercent, setProgresspercent] = useState(0);
+
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -62,7 +64,10 @@ const CreateTweet = ({ user }) => {
 
     // saving tweet to db
     if (tweetMessage !== '') {
-      console.log(tweetImageUrl)
+      // console.log(tweetImageUrl)
+     
+      
+
       var docRef = dbCollection.collection('tweet').add({
         displayName: user.displayName,
         uid: user.uid,
@@ -73,13 +78,13 @@ const CreateTweet = ({ user }) => {
         comments: 0,
         retweets: 0,
         id: Math.random().toString(),
-        profileImage: user.profileImage,
+        // profileImage: url,
         image: tweetImageUrl,
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
 
       })
         .then((docRef) => {
-          console.log("Document successfully written!");
+          // console.log("Document successfully written!");
 
           // saving tweet document id inside tweet object 
 
@@ -99,12 +104,12 @@ const CreateTweet = ({ user }) => {
 
             const mytweetsSnap = await getDoc(mytweetsRef);
             if (mytweetsSnap.exists()) {
-              console.log("mytweetsSnap exists");
+              // console.log("mytweetsSnap exists");
               await updateDoc(mytweetsRef, {
                 tweetId: arrayUnion(docRef.id)
               })
             } else {
-              console.log("mytweetsSnap does not exists", mytweetsSnap);
+              // console.log("mytweetsSnap does not exists", mytweetsSnap);
               await setDoc(mytweetsRef, {
                 tweetId: [docRef.id]
               })

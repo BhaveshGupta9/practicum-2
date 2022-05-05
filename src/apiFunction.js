@@ -1,4 +1,4 @@
-import { arrayUnion,arrayRemove, setDoc, updateDoc } from "firebase/firestore";
+import { arrayUnion, arrayRemove, setDoc, updateDoc } from "firebase/firestore";
 import React from "react";
 
 // import { AppContext } from "./context";
@@ -18,7 +18,7 @@ async function userData(user) {
     // console.log(user);
 
 
-    const docRef = doc(db, "profile", user.uid || user )
+    const docRef = doc(db, "profile", user.uid || user)
     const docSnap = await getDoc(docRef);
 
     // console.log("user Info ", docSnap.data());
@@ -39,7 +39,7 @@ async function userDataa(id) {
     // console.log(user);
 
 
-    const docRef = doc(db, "profile", id )
+    const docRef = doc(db, "profile", id)
     const docSnap = await getDoc(docRef);
 
     // console.log("user Info ", docSnap.data());
@@ -58,8 +58,8 @@ async function userDataa(id) {
 // send tweetId array
 async function userTweets(id, searchCollection) {
 
-  console.log("userTweets ", id);
-  console.log("userTweets ", searchCollection);
+  // console.log("userTweets ", id);
+  // console.log("userTweets ", searchCollection);
 
   try {
 
@@ -102,8 +102,8 @@ async function commentListArray(tweetId) {
     // console.log("commentListSnap ", commentListSnap.data());
     return commentListSnap.data();
   } else {
-    console.log("commentListSnap does not exists", commentListSnap);
-    console.log("No comments")
+    // console.log("commentListSnap does not exists", commentListSnap);
+    // console.log("No comments")
     return false;
   }
 }
@@ -147,21 +147,24 @@ async function addUserChatRoom(userId, receiverId, userName, receiverName) {
   const ChatroomRef1Snap = await getDoc(ChatroomRef1);
 
   if (ChatroomRef1Snap.exists()) {
-    console.log("ChatroomRef1 exists");
-    console.log("ChatroomRef1Snap ", ChatroomRef1Snap.data());
+    // console.log("ChatroomRef1 exists");
+    // console.log("ChatroomRef1Snap ", ChatroomRef1Snap.data());
     await updateDoc(ChatroomRef1, {
       receiverUserName: arrayUnion(receiverName)
     })
   } else {
-    console.log("ChatroomRef1 does not exists");
-    await userDataa(userId)
-      .then(data => {
-        setDoc(ChatroomRef1, {
-          myprofileimage: data.profileImage,
-          myusername: userName,
-          receiverUserName: [receiverName],
-        })
-      })
+    // console.log("ChatroomRef1 does not exists");
+    await userDataa(receiverId).then(data=>{
+      setDoc(ChatroomRef1, {
+        // myprofileimage: data.profileImage,
+        myusername: userName,
+        uid: userId,
+        mydisplayname: data.displayName,
+        receiverUserName: [receiverName],
+    })
+
+     
+    })
   }
 
 
@@ -169,30 +172,32 @@ async function addUserChatRoom(userId, receiverId, userName, receiverName) {
   const ChatroomRef2Snap = await getDoc(ChatroomRef2);
 
   if (ChatroomRef2Snap.exists()) {
-    console.log("ChatroomRef2 exists");
-    console.log("ChatroomRef2Snap ", ChatroomRef2Snap.data());
+    // console.log("ChatroomRef2 exists");
+    // console.log("ChatroomRef2Snap ", ChatroomRef2Snap.data());
     await updateDoc(ChatroomRef2, {
       receiverUserName: arrayUnion(userName)
     })
   } else {
-    console.log("ChatroomRef2 does not exists");
+    // console.log("ChatroomRef2 does not exists");
     await userDataa(receiverId)
-    .then(data => {
-      setDoc(ChatroomRef2, {
-        myprofileimage: data.profileImage,
-        myusername: userName,
-        receiverUserName: [receiverName],
-      })
+      .then(data => {
+        setDoc(ChatroomRef2, {
+          // myprofileimage: data.profileImage,
+          myusername: userName,
+          uid: receiverId,
+          mydisplayname: data.displayName,
+          receiverUserName: [receiverName],
+        })
       })
   }
 }
 
-async function getBy (tweetId,field){
-  const docRef = doc(db,field,tweetId)
+async function getBy(tweetId, field) {
+  const docRef = doc(db, field, tweetId)
   const docSnap = await getDoc(docRef)
-  if(docSnap.exists()){
+  if (docSnap.exists()) {
     const arr = docSnap.data().uId;
-    console.log(arr);
+    // console.log(arr);
     return arr;
   } else {
     return false;
@@ -201,11 +206,11 @@ async function getBy (tweetId,field){
 
 // follow code
 
-async function followAddSub(follow, followBy){
+async function followAddSub(follow, followBy) {
   const followRef = doc(db, "follow", follow);
   const followSnap = await getDoc(followRef);
 
-  async function followAdd(){
+  async function followAdd() {
     const userDoc = await doc(db, "profile", follow);
     const userDocSnap = await getDoc(userDoc);
     await updateDoc(userDoc, {
@@ -219,7 +224,7 @@ async function followAddSub(follow, followBy){
     })
   }
 
-  async function followSub(){
+  async function followSub() {
     const userDoc = await doc(db, "profile", follow);
     const userDocSnap = await getDoc(userDoc);
     await updateDoc(userDoc, {
@@ -234,10 +239,10 @@ async function followAddSub(follow, followBy){
   }
 
   if (followSnap.exists()) {
-    console.log("follow exists");
-    console.log("followSnap ", followSnap.data());
+    // console.log("follow exists");
+    // console.log("followSnap ", followSnap.data());
 
-    if(followSnap.data().followBy.includes(followBy)){
+    if (followSnap.data().followBy.includes(followBy)) {
       await updateDoc(followRef, {
         followBy: arrayRemove(followBy)
       })
@@ -249,24 +254,24 @@ async function followAddSub(follow, followBy){
       await followAdd();
     }
 
-    
+
   } else {
-    console.log("follow does not exists");
-       await setDoc(followRef, {
-          followBy: [followBy],
-          follow: [],
-        })
-        await followAdd();
+    // console.log("follow does not exists");
+    await setDoc(followRef, {
+      followBy: [followBy],
+      follow: [],
+    })
+    await followAdd();
   }
 
   const followRef2 = doc(db, "follow", followBy);
   const followSnap2 = await getDoc(followRef2);
 
   if (followSnap2.exists()) {
-    console.log("follow exists");
-    console.log("followSnap2 ", followSnap2.data());
+    // console.log("follow exists");
+    // console.log("followSnap2 ", followSnap2.data());
 
-    if(followSnap2.data().follow.includes(follow)){
+    if (followSnap2.data().follow.includes(follow)) {
       await updateDoc(followRef2, {
         follow: arrayRemove(follow)
       })
@@ -276,17 +281,24 @@ async function followAddSub(follow, followBy){
         follow: arrayUnion(follow)
       })
       // await followAdd();
-    } 
+    }
   } else {
-    console.log("follow does not exists");
-       await setDoc(followRef2, {
-          follow: [follow],
-          followBy: [],
-        })
-        // await followAdd();
+    // console.log("follow does not exists");
+    await setDoc(followRef2, {
+      follow: [follow],
+      followBy: [],
+    })
+    // await followAdd();
 
-    
+
   }
 }
 
-export { getBy, followAddSub, userData, userTweets, tweetShow, commentListArray, getComment, getChatroom, addUserChatRoom, userDataa };
+
+// get profileImage
+async function getProfileImage(id) {
+  const docSnap = await getDoc(doc(db, "profileImage", id));
+  return docSnap.data();
+}
+
+export { getBy, getProfileImage, followAddSub, userData, userTweets, tweetShow, commentListArray, getComment, getChatroom, addUserChatRoom, userDataa };

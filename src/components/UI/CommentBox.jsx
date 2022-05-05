@@ -36,14 +36,15 @@ function CommentBox({ tweetId,user_email,user_name,tweet, functionCommentButton 
       tweetId: tweetId,
       comments: comment,
       id: Math.random().toString(),
-      profileImage: profile.profileImage,
+      // profileImage: profile.profileImage,
       // image: tweetImage,
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      uid: profile.uid,
 
 
     })
       .then((docRef) => {
-        console.log("Document successfully written!");
+        // console.log("Document successfully written!");
 
         // saving comment document id inside comment object 
 
@@ -59,12 +60,12 @@ function CommentBox({ tweetId,user_email,user_name,tweet, functionCommentButton 
 
           const commentListSnap = await getDoc(commentRef);
           if (commentListSnap.exists()) {
-            console.log("commentListSnap exists");
+            // console.log("commentListSnap exists");
             await updateDoc(commentRef, {
               commentId: arrayUnion(docRef.id)
             })
           } else {
-            console.log("commentListSnap does not exists", commentListSnap);
+            // console.log("commentListSnap does not exists", commentListSnap);
             await setDoc(commentRef, {
               commentId: [docRef.id]
             })

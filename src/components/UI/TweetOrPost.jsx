@@ -24,7 +24,7 @@ import {
   // getDocs,
 } from "../.././firebase";
 
-import { addUserChatRoom, followAddSub } from "../../apiFunction"
+import { addUserChatRoom, followAddSub, getProfileImage } from "../../apiFunction"
 
 import CommentBox from "./CommentBox";
 import VerifiedIcon from '@mui/icons-material/Verified';
@@ -39,12 +39,19 @@ const TweetOrPost = ({image, navigateTo, receiverId, id, displayName, userName, 
 
   const navigate = useNavigate();
   const { profile } = useContext(AppContext);
+  const [url,setUrl] = useState(null)
+
 
   useEffect(() => {
     checkFollow()
     if (profile.uid == receiverId) {
       setShowButton(false)
     }
+    async function image(){
+      await getProfileImage(receiverId).then(data=>setUrl(data.image))
+      } 
+      image();
+    
   }, [])
 
 
@@ -54,7 +61,7 @@ const TweetOrPost = ({image, navigateTo, receiverId, id, displayName, userName, 
   const [showButton, setShowButton] = useState(true)
 
   const likeButton = (e) => {
-    console.log("liked", id);
+    // console.log("liked", id);
 
     async function tweetAdd() {
 
@@ -106,18 +113,18 @@ const TweetOrPost = ({image, navigateTo, receiverId, id, displayName, userName, 
 
       const mylikesSnap = await getDoc(mylikesRef);
       if (mylikesSnap.exists()) {
-        console.log("mylikesSnap exists");
+        // console.log("mylikesSnap exists");
 
         // if tweet id is already in like collection then remove it from like collection
         if (mylikesSnap.data().tweetId.includes(id)) {
-          console.log("already liked");
+          // console.log("already liked");
           await updateDoc(mylikesRef, {
             tweetId: arrayRemove(id)
           })
           tweetSub();
 
         } else {
-          console.log("not liked");
+          // console.log("not liked");
           await updateDoc(mylikesRef, {
             tweetId: arrayUnion(id)
           })
@@ -125,7 +132,7 @@ const TweetOrPost = ({image, navigateTo, receiverId, id, displayName, userName, 
         }
 
       } else {
-        console.log("mylikesSnap does not exists");
+        // console.log("mylikesSnap does not exists");
         await setDoc(mylikesRef, {
           tweetId: [id]
         })
@@ -168,7 +175,7 @@ const TweetOrPost = ({image, navigateTo, receiverId, id, displayName, userName, 
   }
 
   function retweetClicked(e) {
-    console.log("retweet clicked", id)
+    // console.log("retweet clicked", id)
 
     async function retweetAdd() {
 
@@ -220,18 +227,18 @@ const TweetOrPost = ({image, navigateTo, receiverId, id, displayName, userName, 
 
       const myretweetsSnap = await getDoc(myretweetRef);
       if (myretweetsSnap.exists()) {
-        console.log("mylikesSnap exists");
+        // console.log("mylikesSnap exists");
 
         // if tweet id is already in like collection then remove it from like collection
         if (myretweetsSnap.data().tweetId.includes(id)) {
-          console.log("already retweet");
+          // console.log("already retweet");
           await updateDoc(myretweetRef, {
             tweetId: arrayRemove(id)
           })
           retweetSub();
 
         } else {
-          console.log("not retweet");
+          // console.log("not retweet");
           await updateDoc(myretweetRef, {
             tweetId: arrayUnion(id)
           })
@@ -239,7 +246,7 @@ const TweetOrPost = ({image, navigateTo, receiverId, id, displayName, userName, 
         }
 
       } else {
-        console.log("mylikesSnap does not exists");
+        // console.log("mylikesSnap does not exists");
         await setDoc(myretweetRef, {
           tweetId: [id]
         })
@@ -271,7 +278,7 @@ const TweetOrPost = ({image, navigateTo, receiverId, id, displayName, userName, 
 
   function directMessage(e) {
 
-    console.log("direct message clicked")
+    // console.log("direct message clicked")
 
     if (profile.uid != receiverId) {
 
@@ -285,7 +292,7 @@ const TweetOrPost = ({image, navigateTo, receiverId, id, displayName, userName, 
   }
 
   function followButton(e) {
-    console.log("follow button clicked")
+    // console.log("follow button clicked")
     if (profile.uid != receiverId) {
       followAddSub(receiverId, profile.uid)
     }
@@ -304,14 +311,31 @@ const TweetOrPost = ({image, navigateTo, receiverId, id, displayName, userName, 
     const docRef = doc(db, "follow", profile.uid);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
-      console.log(docSnap.data())
+      // console.log(docSnap.data())
       if (docSnap.data().follow.includes(receiverId)) {
         setFollowed(true)
-        console.log(followed)
+        // console.log(followed)
       }
     } else {
       setFollowed(false)
     }
+  }
+
+  // open profile from tweet 
+
+  function handleProfile (e){
+    console.log("image clicked")
+
+    if (!e) var e = window.event;
+    e.cancelBubble = true;
+    if (e.stopPropagation) e.stopPropagation();
+
+
+    if (navigateTo) return navigate("/profile/" + receiverId);
+    
+    // stop event bubbling
+    
+
   }
 
 
@@ -322,10 +346,11 @@ const TweetOrPost = ({image, navigateTo, receiverId, id, displayName, userName, 
           <div className="tweetorpost_profileImage">
             <img
               alt="profile_pic"
-              src={profileImage}
+              src={url ? url : "https://cdn.motor1.com/images/mgl/mrz1e/s3/coolest-cars-feature.webp" }
               height="50px"
               width="50px"
               className="tworpo_profilePic"
+              onClick={handleProfile}
             />
           </div>
           <div className="tweetorpost_content">

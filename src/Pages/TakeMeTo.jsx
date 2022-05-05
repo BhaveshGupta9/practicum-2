@@ -8,7 +8,7 @@ import { auth, logout } from "../login";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useNavigate } from "react-router-dom";
 
-import { userData } from ".././apiFunction";
+import { userData, getProfileImage } from ".././apiFunction";
 import { AppContext } from ".././context";
 
 
@@ -17,20 +17,30 @@ const TakeMeTo = () => {
   const [user] = useAuthState(auth);
   const navigate = useNavigate();
 
-  const { updateProfileInfo } = useContext(AppContext);
+  const { updateProfileInfo,updateProfileImgFunction } = useContext(AppContext);
 
   const [loading,setloading] = useState(false);
 
 
   useEffect(() => {
 
-    console.log(process.env.REACT_APP_TEST)
+    // console.log(process.env.REACT_APP_TEST)
 
     async function getUserData() {
 
       const profile = await userData(user);
       updateProfileInfo(profile);
     }
+
+    async function getUserProfileImage(){
+      const img = await getProfileImage(user.uid).then( data =>{
+
+        updateProfileImgFunction(data.image);
+        // console.log(data)}
+       } )
+    }
+
+    getUserProfileImage();
 
     // function emailSend(e) {
     //   // e.preventDefault();

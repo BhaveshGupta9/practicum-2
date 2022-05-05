@@ -29,19 +29,25 @@ const App = () => {
 
 
   const [profile, updateProfile] = useState({});
+  const [profileImg,updateProfileImg] = useState(null)
 
   function updateProfileInfo(newProfile) {
     updateProfile(newProfile);
   }
 
+  function updateProfileImgFunction(url){
+    updateProfileImg(url);
+  }
 
   return (
-    <AppContext.Provider value={{ profile, updateProfileInfo }}>
+    <AppContext.Provider value={{ profile, updateProfileInfo,profileImg,updateProfileImgFunction }}>
       <Routes>
         <Route path="/" element={ user ? <TakeMeTo/> : <Auth />} />
         <Route path="/takemeto" element={ user ? <TakeMeTo /> : <Auth/> } />
         <Route path="/mytweets" element={ user ? <MyTweets /> : <Auth/>} />
         <Route path="/profile" element={ user ?  <Profile /> : <Auth/>} />
+        <Route path="/profile/:id" element={ user ?  <Profile /> : <Auth/>} />
+
         <Route path="/myposts" element={ user?  <MyPosts />: <Auth/>} />
         <Route path="/notifications" element={ user ?  <Notifications />: <Auth/>} />
         <Route path="/tweetpage/:id" element={ user ?  <TweetPage />: <Auth/>} />

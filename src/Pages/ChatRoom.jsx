@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
 
-import { getChatroom } from ".././apiFunction";
+import { getChatroom,getProfileImage } from ".././apiFunction";
 import { AppContext } from ".././context";
 import Chats from "./Chats";
 import Navbar from "../components/GeneralComponents/Navbar";
@@ -10,14 +10,17 @@ function ChatRoom() {
   const { profile } = useContext(AppContext);
 
   const [chatrooms, setchatrooms] = useState({});
+  const [url,setUrl] = useState(null)
   // const [arr, setArr] =useState([chatrooms.receiverUserName])
 
   useEffect(() => {
     async function callChatroom() {
       const chatroom = await getChatroom(profile.uid).then((res) => {
-        console.log("chatroom from api", res);
+        // console.log("chatroom from api", res);
         setchatrooms(res);
       });
+
+      await getProfileImage(profile.uid).then(data=>setUrl(data.image))
     }
     callChatroom();
   }, []);
@@ -46,18 +49,18 @@ function ChatRoom() {
           <div className="my-chat-profile">
             <img
               alt="profile_pic"
-              src={chatrooms.myprofileimage}
+              src={url ? url : "https://cdn.motor1.com/images/mgl/mrz1e/s3/coolest-cars-feature.webp"}
               height="50px"
               width="50px"
               className="profile-pic-chatroom"
             />{" "}
-            <span> {chatrooms.myusername}</span>
+            <span> {profile.displayName}</span>
           </div>
           <div>
             <h1 className="my-chats">My Chats</h1>
           </div>
           {chatrooms.receiverUserName.map((rec) => {
-            return <Chats key={rec} receiver={rec} sender={profile.username} />;
+            return <Chats key={rec} receiver={rec} sender={profile.username}  />;
           })}
         </div>
       </div>

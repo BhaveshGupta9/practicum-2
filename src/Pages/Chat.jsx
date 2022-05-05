@@ -3,6 +3,8 @@ import ChatMessage from "./ChatMessage";
 import "./Chat.css";
 import { useParams } from "react-router-dom";
 import Navbar from "../components/GeneralComponents/Navbar";
+import {  getProfileImage } from "../apiFunction"
+
 
 import {
   //  auth,
@@ -26,7 +28,7 @@ function Chat() {
   const { collect } = useParams();
 
   useEffect(() => {
-    console.log(collect);
+    // console.log(collect);
   }, []);
 
   const { profile } = useContext(AppContext);
@@ -45,24 +47,20 @@ function Chat() {
   });
 
   const [formValue, setFormValue] = useState("");
+  // const [url,setUrl] = useState(null)
+
 
   const sendMessage = async (e) => {
     e.preventDefault();
-    // console.log(e)
-    // const { uid, profileImage } ={profile};
-    // console.log(uid);
-    // console.log(profile)
+  
+    // await getProfileImage(profile.uid).then(data=>setUrl(data.image))
 
-    console.log(formValue);
-    console.log(profile.uid);
-    console.log(profile.profileImage);
-    console.log(profile.displayName);
 
     const dpcRef = await dbCollection.collection("message" + collect).add({
       text: formValue,
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       uid: profile.uid,
-      dp: profile.profileImage,
+      // dp: profile.profileImage,
       name: profile.displayName,
     });
 

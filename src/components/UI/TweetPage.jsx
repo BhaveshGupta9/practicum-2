@@ -60,14 +60,14 @@ function TweetPage() {
           );
         });
 
-      console.log(likeBy);
+      // console.log(likeBy);
     }
 
     getByData();
   }, []);
 
   if (likeBy) {
-    console.log(likeBy);
+    // console.log(likeBy);
   }
 
   return (
@@ -80,13 +80,15 @@ function TweetPage() {
               key={tweet.id}
               id={tweet.id}
               displayName={tweet.displayName}
+              receiverId={tweet.uid}
+
               userName={tweet.userName}
               comments={tweet.comments}
               likes={tweet.likes}
               retweets={tweet.retweets}
               tweet={tweet.tweet}
               verified={tweet.verified}
-              profileImage={tweet.profileImage}
+              // profileImage={tweet.profileImage}
               navigateTo={false}
               image={tweet.image}
             />
@@ -98,7 +100,8 @@ function TweetPage() {
               <h3>Comments</h3>
               <CommentShow
                 key={comment.id}
-                profileImage={comment.profileImage}
+                // profileImage={comment.profileImage}
+                uid={comment.uid}
                 displayName={comment.displayName}
                 userName={comment.userName}
                 verified={comment.verified}
@@ -120,10 +123,12 @@ function TweetPage() {
               <div className="likeDiv">
                 <LikeRetweetBy
                   key={Math.random()}
-                  profileImage={profile.profileImage}
+                  // profileImage={profile.profileImage}
                   displayName={profile.displayName}
                   verified={profile.verified}
                   userName={profile.username}
+                  uid={profile.uid}
+
                 />
               </div>
             ))
@@ -142,7 +147,9 @@ function TweetPage() {
               <LikeRetweetBy
                 key={Math.random()}
                 profileImage={profile.profileImage}
-                displayName={profile.displayName}
+                // displayName={profile.displayName}
+                uid={profile.uid}
+
                 verified={profile.verified}
                 userName={profile.username}
               />

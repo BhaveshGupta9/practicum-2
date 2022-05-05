@@ -25,12 +25,18 @@ const signInWithGoogle = async () => {
     const q = query(collection(db, "profile"), where("uid", "==", user.uid));
     const docs = await getDocs(q);
     if (docs.docs.length === 0) {
+
+      const profileRef = doc(db,"profileImage",user.uid)
+      const docSnap = await setDoc(profileRef,{
+        image: user.photoURL
+      })
+
       await setDoc(doc(db, "profile", user.uid), {
         uid: user.uid,
         displayName: user.displayName,
         username: user.email.split("@")[0],
         verified: true,
-        profileImage: user.photoURL,
+        // profileImage: user.photoURL,
         userBio: "To be filled by user",
         numberOfTweets: 0,
         followers: 0,
