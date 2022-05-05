@@ -12,6 +12,7 @@ import MessageIcon from '@mui/icons-material/Message';
 import Buttonn from '@mui/material/Button';
 
 import { AppContext } from "../../context";
+import alex from "./alex.jpg";
 
 import {
   //  auth, 
@@ -366,7 +367,7 @@ const TweetOrPost = ({image,retweetBy, navigateTo, receiverId, id, displayName, 
           <div className="tweetorpost_profileImage">
             <img
               alt="profile_pic"
-              src={url ? url : "https://cdn.motor1.com/images/mgl/mrz1e/s3/coolest-cars-feature.webp" }
+              src={url ? url : alex }
               height="50px"
               width="50px"
               className="tworpo_profilePic"

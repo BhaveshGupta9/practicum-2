@@ -2,6 +2,8 @@ import React,{useContext, useEffect, useState} from 'react'
 import { AppContext } from ".././context";
 import "./Chat.css"
 import { getProfileImage } from "../apiFunction"
+import alex from "./alex.jpg";
+
 
 
 
@@ -26,7 +28,7 @@ function ChatMessage(props) {
       <div className={`message ${messageClass}`}  
         style={{marginBottom: props.last ? '10px' : '0'}}
        >
-        <img className='imgChat' src={url ? url : "https://cdn.motor1.com/images/mgl/mrz1e/s3/coolest-cars-feature.webp" } alt="dp" />
+        <img className='imgChat' src={url ? url : alex } alt="dp" />
         {/* <embed>{props.messaga.name}</embed> */}
         <p className='pChat' >{props.message.text}</p>
       </div>

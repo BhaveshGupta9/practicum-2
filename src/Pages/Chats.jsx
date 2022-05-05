@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Chats.css";
 import { getProfileImage } from "../apiFunction"
+import alex from "./alex.jpg";
+
 import {
   //  auth, 
   setDoc,
@@ -65,7 +67,7 @@ function Chats({ receiver, sender }) {
       >
         <img
               alt="profile_pic"
-              src={url ? url : "https://cdn.motor1.com/images/mgl/mrz1e/s3/coolest-cars-feature.webp"}
+              src={url ? url : alex}
               height="50px"
               width="50px"
               className="profile-pic-chatroom"

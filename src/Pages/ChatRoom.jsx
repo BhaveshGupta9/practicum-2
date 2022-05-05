@@ -5,6 +5,8 @@ import { AppContext } from ".././context";
 import Chats from "./Chats";
 import Navbar from "../components/GeneralComponents/Navbar";
 import "./ChatRoom.css";
+import alex from "./alex.jpg";
+
 
 function ChatRoom() {
   const { profile } = useContext(AppContext);
@@ -49,7 +51,7 @@ function ChatRoom() {
           <div className="my-chat-profile">
             <img
               alt="profile_pic"
-              src={url ? url : "https://cdn.motor1.com/images/mgl/mrz1e/s3/coolest-cars-feature.webp"}
+              src={url ? url :alex}
               height="50px"
               width="50px"
               className="profile-pic-chatroom"
