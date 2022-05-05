@@ -5,19 +5,21 @@ import Navbar from "../components/GeneralComponents/Navbar";
 import VerifiedIcon from "@mui/icons-material/Verified";
 import EditIcon from '@mui/icons-material/Edit';
 
-// import db from '../firebase'
-
-// import { useNavigate } from "react-router-dom";
 import { auth, db, getDoc, doc, dbCollection, updateDoc, storage, uploadBytesResumable, ref, getDownloadURL } from "../firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 
 import { AppContext } from ".././context";
 import TweetOrPost from "../components/UI/TweetOrPost";
 
-import { userTweets, tweetShow } from ".././apiFunction";
+import { userTweets, tweetShow, userData, getProfileImage } from ".././apiFunction";
+import { useParams } from "react-router-dom";
+
 
 const Profile = () => {
 
+  const { id } = useParams();
+  // console.log(id);
+  
 
   const barOuter = document.querySelector(".bar-outer");
   const options = document.querySelectorAll(".bar-grey .option");
@@ -34,20 +36,34 @@ const Profile = () => {
       }
       current = option.index;
     })
-  );
-
-  const { profile,profileImg } = useContext(AppContext);
+    );
+    
+    const { profile,profileImg } = useContext(AppContext);
   const [tweets, setTweets] = useState([]);
+  const [p, setP] = useState(profile);
 
-  const [bio, setBio] = useState(profile.userBio);
+  const [bio, setBio] = useState(p.userBio);
   const [editBioField, setEditBioField] = useState(false);
+
+  useEffect(() => {
+    getUserTweets("mytweets");
+
+    async function getNew(){
+      const doc = await userData(id) 
+      setP(doc);
+      await getProfileImage(p.uid).then(data=>setUrl(data.image))
+    }
+    if(id){
+      getNew();
+    }
+  }, []);
 
   const editButton = () => {
     setEditBioField(true);
   };
 
   const addBio = () => {
-    const profileRef = doc(db, "profile", profile.uid);
+    const profileRef = doc(db, "profile", p.uid);
 
     async function updateBio() {
       await updateDoc(profileRef, {
@@ -60,8 +76,8 @@ const Profile = () => {
   };
 
   async function getUserTweets(searchCollection) {
-    if (profile.uid && searchCollection) {
-      const myTweet = await userTweets(profile.uid, searchCollection);
+    if (p.uid && searchCollection) {
+      const myTweet = await userTweets(p.uid, searchCollection);
       // console.log(myTweet);
 
       setTweets([]);
@@ -105,7 +121,7 @@ const Profile = () => {
 
     if (!file) return;
 
-    const storageRef = ref(storage, `profileImage/${profile.uid}`);
+    const storageRef = ref(storage, `profileImage/${p.uid}`);
     const uploadTask = uploadBytesResumable(storageRef, file);
 
     uploadTask.on("state_changed",
@@ -120,7 +136,7 @@ const Profile = () => {
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           setUrl(downloadURL)
-          const docRef = doc(db, "profileImage", profile.uid);
+          const docRef = doc(db, "profileImage", p.uid);
           updateDoc(docRef, {
             image: downloadURL,
           })
@@ -143,9 +159,7 @@ const Profile = () => {
     getUserTweets("retweet");
   };
 
-  useEffect(() => {
-    getUserTweets("mytweets");
-  }, []);
+  
 
   return (
     <Fragment>
@@ -159,7 +173,7 @@ const Profile = () => {
                 src={profileImageUrl}
                 alt="profile-pic"
               />
-              <EditIcon onClick={handleProfileImage} />
+            {!id &&   <EditIcon onClick={handleProfileImage} /> }
             </div>
             {showEditImage && (
               <div> <form onSubmit={handleSubmit} className='form'>
@@ -172,12 +186,12 @@ const Profile = () => {
             )}
             <div className="profile-name-bio">
               <div>
-                <h2>{profile.displayName}</h2>
+                <h2>{p.displayName}</h2>
               </div>
               <div>
                 <span>
-                  @{profile.username}{" "}
-                  {profile.verified && (
+                  @{p.username}{" "}
+                  {p.verified && (
                     <VerifiedIcon className="post--badge" color="primary" />
                   )}
                 </span>
@@ -185,7 +199,7 @@ const Profile = () => {
               <div>
                 <p>
                   <i>{bio}</i>
-                  <button onClick={editButton}>Edit</button>
+               {!id &&    <button onClick={editButton}>Edit</button> }
                 </p>
                 {editBioField && (
                   <div>
@@ -204,7 +218,7 @@ const Profile = () => {
           </div>
           <div className="profile-lower animate__animated animate__fadeIn">
             <div className="profile-no-of-tweets">
-              <h3>{profile.numberOfTweets}</h3>
+              <h3>{p.numberOfTweets}</h3>
               <p>tweets</p>
             </div>
             {/* <div className="profile-no-of-posts">
@@ -212,11 +226,11 @@ const Profile = () => {
               <p>posts</p>
             </div> */}
             <div className="profile-no-of-followers">
-              <h3>{profile.followers}</h3>
+              <h3>{p.followers}</h3>
               <p>followers</p>
             </div>
             <div className="profile-no-of-following">
-              <h3>{profile.followings}</h3>
+              <h3>{p.followings}</h3>
               <p>following</p>
             </div>
           </div>

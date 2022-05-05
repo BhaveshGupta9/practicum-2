@@ -321,6 +321,23 @@ const TweetOrPost = ({image, navigateTo, receiverId, id, displayName, userName, 
     }
   }
 
+  // open profile from tweet 
+
+  function handleProfile (e){
+    console.log("image clicked")
+
+    if (!e) var e = window.event;
+    e.cancelBubble = true;
+    if (e.stopPropagation) e.stopPropagation();
+
+
+    if (navigateTo) return navigate("/profile/" + receiverId);
+    
+    // stop event bubbling
+    
+
+  }
+
 
   return (
     <div className="tweetpost-main-container" >
@@ -333,6 +350,7 @@ const TweetOrPost = ({image, navigateTo, receiverId, id, displayName, userName, 
               height="50px"
               width="50px"
               className="tworpo_profilePic"
+              onClick={handleProfile}
             />
           </div>
           <div className="tweetorpost_content">
