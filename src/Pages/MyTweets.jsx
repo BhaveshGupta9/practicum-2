@@ -83,6 +83,10 @@ const MyTweets = () => {
     return navigate("/chatroom")
   }
 
+  function handleNoti() {
+    return navigate("/notifications")
+  }
+
   return (
     <div>
       <Navbar />
@@ -92,7 +96,7 @@ const MyTweets = () => {
             <Button onClick={homeButtonClick} className="my_tweets_button animate__animated animate__fadeIn">
               <FontAwesomeIcon icon={faHouse} />
             </Button>
-            <Button className="my_tweets_button animate__animated animate__fadeIn">
+            <Button onClick={handleNoti} className="my_tweets_button animate__animated animate__fadeIn">
               <FontAwesomeIcon icon={faBell} />
             </Button>
             <Button className="my_tweets_button animate__animated animate__fadeIn">

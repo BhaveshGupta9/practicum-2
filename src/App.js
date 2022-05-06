@@ -48,6 +48,7 @@ const App = () => {
         <Route path="/profile" element={ user ?  <Profile /> : <Auth/>} />
         <Route path="/profile/:id" element={ user ?  <Profile /> : <Auth/>} />
 
+
         <Route path="/myposts" element={ user?  <MyPosts />: <Auth/>} />
         <Route path="/notifications" element={ user ?  <Notifications />: <Auth/>} />
         <Route path="/tweetpage/:id" element={ user ?  <TweetPage />: <Auth/>} />

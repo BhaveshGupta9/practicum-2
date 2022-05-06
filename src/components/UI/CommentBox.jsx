@@ -14,11 +14,12 @@ import {
   updateDoc, arrayUnion,firebase
   // getDocs,
 } from "../.././firebase";
+import{ setNotification }from '../../apiFunction';
 
 import { sendEmailComment } from '../../email';
 import { AppContext } from "../../context"
 
-function CommentBox({ tweetId,user_email,user_name,tweet, functionCommentButton }) {
+function CommentBox({receiverId, tweetId,user_email,user_name,tweet, functionCommentButton }) {
 
   const [comment, setComment] = useState('');
 
@@ -93,6 +94,15 @@ function CommentBox({ tweetId,user_email,user_name,tweet, functionCommentButton 
 
     commentAdd();
 
+    // saving noti to db
+
+
+ async function notification() {
+    
+      await setNotification(receiverId,"comment",profile.displayName,"Your tweet has a new comment, by ",tweet)
+    }
+    notification();
+    
     const emailObj = {
       user_name: user_name,
       user_email: user_email + "@gmail.com",

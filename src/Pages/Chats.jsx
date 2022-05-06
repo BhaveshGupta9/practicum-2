@@ -24,6 +24,7 @@ function Chats({ receiver, sender }) {
   const [uid,setuid] = useState(null)
 
 
+
   useEffect(() => {
     async function receiverdata() {
       const q = query(collection(db, "profile"), where("username", "==", receiver));
@@ -45,11 +46,14 @@ function Chats({ receiver, sender }) {
 
   function divClick() {
     const arr = [receiver, sender];
+
+
+
     arr.sort(function (a, b) {
       return a.localeCompare(b);
     });
 
-    navigate("/chat/" + arr[0] + arr[1]);
+    navigate("/chat/" + arr[0] + arr[1],{state:{receiverId:uid}});
   }
 
   return (

@@ -13,6 +13,7 @@ import TweetOrPost from "../components/UI/TweetOrPost";
 
 import { userTweets, tweetShow, userData, getProfileImage } from ".././apiFunction";
 import { useParams } from "react-router-dom";
+import alex from "./alex.jpg";
 
 
 const Profile = () => {
@@ -20,6 +21,50 @@ const Profile = () => {
   const { id } = useParams();
   // console.log(id);
   
+
+  const [load,setLoad] = useState(id);
+  
+  const { profile,profileImg } = useContext(AppContext);
+  const [profileImageUrl, setUrl] = useState(profileImg);
+  const [showEditImage, setShowEditImage] = useState(false);
+  const [progresspercent, setProgresspercent] = useState(0);
+  
+  const [tweets, setTweets] = useState([]);
+  const [p, setP] = useState(profile);
+
+  const [bio, setBio] = useState(p.userBio);
+  const [editBioField, setEditBioField] = useState(false);
+  
+
+
+  useEffect(() => {
+    getUserTweets("mytweets");
+
+    async function getNew(){
+      const doc = await userData(id) 
+      await getProfileImage(p.uid).then(data=>setUrl(data.image))
+      setP(doc);
+      setUrl(alex)
+      // showMyTweets();
+      // showLikedTweets();
+      // showMyreTweets();
+    }
+    if(id){
+      getNew();
+      
+    }
+  }, []);
+
+  const editButton = () => {
+    setEditBioField(true);
+  };
+
+  // if(load!=null){
+  //   if(profileImg!==profileImageUrl){
+  //     return <h1>Loading ...</h1>
+  //   }
+  //   console.log("load");
+  // }
 
   const barOuter = document.querySelector(".bar-outer");
   const options = document.querySelectorAll(".bar-grey .option");
@@ -38,29 +83,8 @@ const Profile = () => {
     })
     );
     
-    const { profile,profileImg } = useContext(AppContext);
-  const [tweets, setTweets] = useState([]);
-  const [p, setP] = useState(profile);
 
-  const [bio, setBio] = useState(p.userBio);
-  const [editBioField, setEditBioField] = useState(false);
 
-  useEffect(() => {
-    getUserTweets("mytweets");
-
-    async function getNew(){
-      const doc = await userData(id) 
-      setP(doc);
-      await getProfileImage(p.uid).then(data=>setUrl(data.image))
-    }
-    if(id){
-      getNew();
-    }
-  }, []);
-
-  const editButton = () => {
-    setEditBioField(true);
-  };
 
   const addBio = () => {
     const profileRef = doc(db, "profile", p.uid);
@@ -104,9 +128,6 @@ const Profile = () => {
   }
 
 
-  const [profileImageUrl, setUrl] = useState(profileImg);
-  const [showEditImage, setShowEditImage] = useState(false);
-  const [progresspercent, setProgresspercent] = useState(0);
 
 
   function handleProfileImage() {
@@ -159,6 +180,7 @@ const Profile = () => {
     getUserTweets("retweet");
   };
 
+  
   
 
   return (

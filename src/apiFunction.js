@@ -348,4 +348,49 @@ function addTweet (docTweet){
     });
 }
 
-export { getBy,addTweet, getProfileImage, followAddSub, userData, userTweets, tweetShow, commentListArray, getComment, getChatroom, addUserChatRoom, userDataa };
+// Notification 
+async function setNotification (uid,type,from,message,tweet){
+  console.log("inside function")
+  const docRef = doc(db, "notification", uid);
+  const docSnap = await getDoc(docRef);
+  const docUpdate = {
+    type : type,
+    from : from,
+    message : message,
+    tweet : tweet,
+  }
+  console.log(docUpdate)
+  if (docSnap.exists()) {
+    // console.log("notification exists");
+    // console.log("notificationSnap ", docSnap.data());
+    await updateDoc(docRef, {
+      noti: arrayUnion(docUpdate)
+    }).then(() => {
+      console.log("Updated")
+    })
+    .catch((error) => {
+      console.error("Error writing document: ", error);
+    });
+  } else {
+    // console.log("notification does not exists");
+    await setDoc(docRef, {
+      noti: [docUpdate]
+    })
+    .then(() => {
+      console.log("Updated")
+    })
+    .catch((error) => {
+      console.error("Error writing document: ", error);
+    }
+    );
+  }
+
+}
+
+async function getNotification (id){
+  const docSnap = await getDoc(doc(db, "notification", id));
+  return docSnap.data();
+}
+
+
+export {setNotification,getNotification, getBy,addTweet, getProfileImage, followAddSub, userData, userTweets, tweetShow, commentListArray, getComment, getChatroom, addUserChatRoom, userDataa };

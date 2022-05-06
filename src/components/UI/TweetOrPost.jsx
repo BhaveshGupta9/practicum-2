@@ -21,11 +21,11 @@ import {
   // logout, 
   doc,
   db,
-  updateDoc, arrayUnion, arrayRemove,firebase
+  updateDoc, arrayUnion, arrayRemove, firebase
   // getDocs,
 } from "../.././firebase";
 
-import { addUserChatRoom, followAddSub,addTweet, getProfileImage } from "../../apiFunction"
+import { addUserChatRoom, setNotification, followAddSub, addTweet, getProfileImage } from "../../apiFunction"
 
 import CommentBox from "./CommentBox";
 import VerifiedIcon from '@mui/icons-material/Verified';
@@ -35,12 +35,12 @@ import { sendEmailLike } from "../.././email"
 
 
 
-const TweetOrPost = ({image,retweetBy, navigateTo, receiverId, id, displayName, userName, verified, tweet, comments, likes, retweets, profileImage }) => {
+const TweetOrPost = ({ image, retweetBy, navigateTo, receiverId, id, displayName, userName, verified, tweet, comments, likes, retweets, profileImage }) => {
 
 
   const navigate = useNavigate();
   const { profile } = useContext(AppContext);
-  const [url,setUrl] = useState(null)
+  const [url, setUrl] = useState(null)
 
 
   useEffect(() => {
@@ -48,11 +48,11 @@ const TweetOrPost = ({image,retweetBy, navigateTo, receiverId, id, displayName, 
     if (profile.uid == receiverId) {
       setShowButton(false)
     }
-    async function image(){
-      await getProfileImage(receiverId).then(data=>setUrl(data.image))
-      } 
-      image();
-    
+    async function image() {
+      await getProfileImage(receiverId).then(data => setUrl(data.image))
+    }
+    image();
+
   }, [])
 
 
@@ -146,6 +146,15 @@ const TweetOrPost = ({image,retweetBy, navigateTo, receiverId, id, displayName, 
     // adding like count in tweet object
 
     const tweetRef = doc(db, "tweet", id);
+
+
+    // saving notification to db
+
+    async function notification() {
+
+      await setNotification(receiverId, "like", profile.displayName, "Your tweet is liked by ", tweet)
+    }
+    notification();
 
     // stop event bubbling
     if (!e) var e = window.event;
@@ -258,22 +267,29 @@ const TweetOrPost = ({image,retweetBy, navigateTo, receiverId, id, displayName, 
     myretweets();
 
 
+    async function notification() {
+
+      await setNotification(receiverId, "retweet", profile.displayName, "Your tweet is retweeted by ", tweet)
+    }
+    notification();
+
+
     // retweet add tweet
 
     const docTweet = {
       displayName: displayName,
-        uid: receiverId,
-        userName: userName,
-        verified: verified,
-        tweet: tweet,
-        likes: likes,
-        comments: comments,
-        retweets: retweets,
-        id: Math.random().toString(),
-        // profileImage: url,
-        image: image,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-        retweetBy: [profile.displayName,profile.username,verified],
+      uid: receiverId,
+      userName: userName,
+      verified: verified,
+      tweet: tweet,
+      likes: likes,
+      comments: comments,
+      retweets: retweets,
+      id: Math.random().toString(),
+      // profileImage: url,
+      image: image,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      retweetBy: [profile.displayName, profile.username, verified],
     }
 
     addTweet(docTweet);
@@ -344,7 +360,7 @@ const TweetOrPost = ({image,retweetBy, navigateTo, receiverId, id, displayName, 
 
   // open profile from tweet 
 
-  function handleProfile (e){
+  function handleProfile(e) {
     console.log("image clicked")
 
     if (!e) var e = window.event;
@@ -353,9 +369,9 @@ const TweetOrPost = ({image,retweetBy, navigateTo, receiverId, id, displayName, 
 
 
     if (navigateTo) return navigate("/profile/" + receiverId);
-    
+
     // stop event bubbling
-    
+
 
   }
 
@@ -367,7 +383,7 @@ const TweetOrPost = ({image,retweetBy, navigateTo, receiverId, id, displayName, 
           <div className="tweetorpost_profileImage">
             <img
               alt="profile_pic"
-              src={url ? url : alex }
+              src={url ? url : alex}
               height="50px"
               width="50px"
               className="tworpo_profilePic"
@@ -376,22 +392,22 @@ const TweetOrPost = ({image,retweetBy, navigateTo, receiverId, id, displayName, 
           </div>
           <div className="tweetorpost_content">
             <div>
-            {retweetBy && (   <p className="tworpo_name"> <i>retweet <FontAwesomeIcon icon={faRetweet} /></i> {retweetBy[0]} <span className='post--headerSpecial'>
+              {retweetBy && (<p className="tworpo_name"> <i>retweet <FontAwesomeIcon icon={faRetweet} /></i> {retweetBy[0]} <span className='post--headerSpecial'>
                 {retweetBy[2] && <VerifiedIcon className='post--badge' color='primary' />}@{retweetBy[1]}
-              </span> </p> )}
+              </span> </p>)}
               <p className="tworpo_name">{displayName} <span className='post--headerSpecial'>
                 {verified && <VerifiedIcon className='post--badge' color='primary' />}@{userName}
               </span> </p>
-           
-              {showButton && <Buttonn onClick={followButton} color={followed ?"error": "secondary"} variant="contained">{followed ? "Unfollow" : "Follow"}</Buttonn>
+
+              {showButton && <Buttonn onClick={followButton} color={followed ? "error" : "secondary"} variant="contained">{followed ? "Unfollow" : "Follow"}</Buttonn>
               } </div>
             <div>
               <p>{tweet}</p>
             </div>
             {
-            image &&
-            <img src={image} alt='uploaded file' height={200} />
-          }
+              image &&
+              <img src={image} alt='uploaded file' height={200} />
+            }
           </div>
         </div>
         <div className="tweetorpost_lower">
@@ -414,7 +430,7 @@ const TweetOrPost = ({image,retweetBy, navigateTo, receiverId, id, displayName, 
             <Button className="tworpo_message" onClick={directMessage} >
               <FontAwesomeIcon icon={faMessage} className='post--badge' color='primary' />
             </Button>
-          </div>} 
+          </div>}
         </div>
 
       </div>
@@ -424,6 +440,7 @@ const TweetOrPost = ({image,retweetBy, navigateTo, receiverId, id, displayName, 
         user_name={displayName}
         user_email={userName}
         tweet={tweet}
+        receiverId={receiverId}
       />}
     </div>
   );

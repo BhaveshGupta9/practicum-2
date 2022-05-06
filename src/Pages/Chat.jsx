@@ -1,9 +1,9 @@
 import React, { useRef, useState, useContext, useEffect } from "react";
 import ChatMessage from "./ChatMessage";
 import "./Chat.css";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import Navbar from "../components/GeneralComponents/Navbar";
-import {  getProfileImage } from "../apiFunction"
+import {  getProfileImage, setNotification } from "../apiFunction"
 
 
 import {
@@ -26,7 +26,10 @@ import { AppContext } from ".././context";
 
 function Chat() {
   const { collect } = useParams();
-
+  const location = useLocation();
+  const receiverId = location.state.receiverId;
+  // console.log(receiverId);
+ 
   useEffect(() => {
     // console.log(collect);
   }, []);
@@ -64,6 +67,12 @@ function Chat() {
       name: profile.displayName,
     });
 
+    async function notification() {
+
+      await setNotification(receiverId, "chat", profile.displayName, "You have a new message from ", null)
+    }
+    notification();
+    
     // console.log(dpcRef.id);
 
     setFormValue("");
