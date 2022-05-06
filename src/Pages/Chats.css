@@ -1,5 +1,5 @@
 .chat-user-name{
-    width: 100%;
+    width: 15rem;
     display: flex;
     justify-content: space-around;
     align-items: center;
