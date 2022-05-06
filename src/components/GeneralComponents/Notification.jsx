@@ -2,7 +2,7 @@ import React, { Fragment } from "react";
 import "./Notification.css";
 
 const Notification = ({props}) => {
-  console.log("props",props)
+  // console.log("props",props)
   return (
     <Fragment>
       <div class="notif-main">

@@ -8,7 +8,7 @@ import {
   faHeart,
   faMessage,
 } from "@fortawesome/free-solid-svg-icons";
-import MessageIcon from '@mui/icons-material/Message';
+
 import Buttonn from '@mui/material/Button';
 
 import { AppContext } from "../../context";
@@ -361,7 +361,7 @@ const TweetOrPost = ({ image, retweetBy, navigateTo, receiverId, id, displayName
   // open profile from tweet 
 
   function handleProfile(e) {
-    console.log("image clicked")
+    // console.log("image clicked") 
 
     if (!e) var e = window.event;
     e.cancelBubble = true;

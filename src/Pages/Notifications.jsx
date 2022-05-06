@@ -28,16 +28,17 @@ const Notifications = () => {
 
   const [user] = useAuthState(auth);
 
-  const { profile,profileImg } = useContext(AppContext);
+  const { profile} = useContext(AppContext);
   const [noti, setNoti]= useState([]);
   const navigate = useNavigate();
 
 
   useEffect(() => {
       async function getNoti(){
-        const doc = await getNotification(profile.uid).then(data=>{console.log(data)
+         await getNotification(profile.uid).then(data=>{
+          // console.log(data)
           setNoti(data.noti);
-          console.log(noti[0]);
+          // console.log(noti[0]);
         })
 
       }

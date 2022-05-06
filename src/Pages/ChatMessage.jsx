@@ -11,7 +11,7 @@ function ChatMessage(props) {
  
   const { profile } = useContext(AppContext);
   const [url,setUrl] = useState(null)
-  const [messageClass, setClass] = useState(props.message.uid === profile.uid ? 'sent' : 'received')
+  const [messageClass] = useState(props.message.uid === profile.uid ? 'sent' : 'received')
 
   useEffect(() => {
     async function image(){

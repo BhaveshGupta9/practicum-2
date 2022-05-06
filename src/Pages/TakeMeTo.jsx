@@ -19,7 +19,7 @@ const TakeMeTo = () => {
 
   const { updateProfileInfo,updateProfileImgFunction } = useContext(AppContext);
 
-  const [loading,setloading] = useState(false);
+  const [loading] = useState(false);
 
 
   useEffect(() => {
@@ -33,7 +33,7 @@ const TakeMeTo = () => {
     }
 
     async function getUserProfileImage(){
-      const img = await getProfileImage(user.uid).then( data =>{
+       await getProfileImage(user.uid).then( data =>{
 
         updateProfileImgFunction(data.image);
         // console.log(data)}

@@ -17,7 +17,7 @@ function ChatRoom() {
 
   useEffect(() => {
     async function callChatroom() {
-      const chatroom = await getChatroom(profile.uid).then((res) => {
+       await getChatroom(profile.uid).then((res) => {
         // console.log("chatroom from api", res);
         setchatrooms(res);
       });

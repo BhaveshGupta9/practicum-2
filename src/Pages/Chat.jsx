@@ -1,22 +1,22 @@
-import React, { useRef, useState, useContext, useEffect } from "react";
+import React, {  useState, useContext, useEffect } from "react";
 import ChatMessage from "./ChatMessage";
 import "./Chat.css";
 import { useParams, useLocation } from "react-router-dom";
 import Navbar from "../components/GeneralComponents/Navbar";
-import {  getProfileImage, setNotification } from "../apiFunction"
+import {   setNotification } from "../apiFunction"
 
 
 import {
   //  auth,
   db,
   dbCollection,
-  getDocs,
+  
   // logout,
-  doc,
+  
   // getDocs,
   onSnapshot,
   query,
-  addDoc,
+  
   collection,
   orderBy,
   firebase,
@@ -45,7 +45,7 @@ function Chat() {
     limit(25)
   );
 
-  const me = onSnapshot(q, (snapshot) => {
+   onSnapshot(q, (snapshot) => {
     setMessages(snapshot.docs.map((doc) => doc.data()));
   });
 
@@ -59,7 +59,7 @@ function Chat() {
     // await getProfileImage(profile.uid).then(data=>setUrl(data.image))
 
 
-    const dpcRef = await dbCollection.collection("message" + collect).add({
+     await dbCollection.collection("message" + collect).add({
       text: formValue,
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       uid: profile.uid,

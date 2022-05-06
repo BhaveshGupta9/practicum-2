@@ -5,13 +5,13 @@ import Navbar from "../components/GeneralComponents/Navbar";
 import VerifiedIcon from "@mui/icons-material/Verified";
 import EditIcon from '@mui/icons-material/Edit';
 
-import { auth, db, getDoc, doc, dbCollection, updateDoc, storage, uploadBytesResumable, ref, getDownloadURL } from "../firebase";
-import { useAuthState } from "react-firebase-hooks/auth";
+import {  db, doc, dbCollection, updateDoc, storage, uploadBytesResumable, ref, getDownloadURL } from "../firebase";
+
 
 import { AppContext } from ".././context";
 import TweetOrPost from "../components/UI/TweetOrPost";
 
-import { userTweets, tweetShow, userData, getProfileImage } from ".././apiFunction";
+import { userTweets,  userData, getProfileImage } from ".././apiFunction";
 import { useParams } from "react-router-dom";
 import alex from "./alex.jpg";
 
@@ -22,7 +22,6 @@ const Profile = () => {
   // console.log(id);
   
 
-  const [load,setLoad] = useState(id);
   
   const { profile,profileImg } = useContext(AppContext);
   const [profileImageUrl, setUrl] = useState(profileImg);

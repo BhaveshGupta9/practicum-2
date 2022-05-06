@@ -4,16 +4,9 @@ import Button from "../UI/Button";
 import "./CreateTweet.css";
 import {
   //  auth, 
-  dbCollection,
-  setDoc,
 
-  getDoc,
-  // logout, 
-  doc,
-  db,
-  updateDoc, arrayUnion
   // getDocs,
-  , storage, ref, uploadBytesResumable, getDownloadURL, firebase, increment
+  storage, ref, uploadBytesResumable, getDownloadURL, firebase, 
 } from "../.././firebase";
 
 import { addTweet } from "../../apiFunction";

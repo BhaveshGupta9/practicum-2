@@ -13,7 +13,7 @@ import {
   faArrowRightFromBracket,
 } from "@fortawesome/free-solid-svg-icons";
 import { faTwitter } from "@fortawesome/free-brands-svg-icons";
-import MessageIcon from '@mui/icons-material/Message';
+
 
 
 import { useNavigate } from "react-router-dom";
@@ -21,9 +21,9 @@ import {
   //  auth, 
   db,
   // dbCollection,
-  getDocs,
+  
   // logout, 
-  doc,
+  
   // getDocs,
   onSnapshot,
 
@@ -54,7 +54,7 @@ const MyTweets = () => {
     async function getAllTweet() {
 
       const q = query(collection(db, "tweet"),orderBy("createdAt","desc"));
-      const unsub = onSnapshot(q, (snapshot) => {
+      onSnapshot(q, (snapshot) => {
    
         setTweets(snapshot.docs.map(doc => doc.data()))
       });

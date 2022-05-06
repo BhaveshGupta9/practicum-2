@@ -1,5 +1,4 @@
 import { arrayUnion, arrayRemove, setDoc, updateDoc,increment } from "firebase/firestore";
-import React from "react";
 
 
 // import { AppContext } from "./context";
@@ -350,7 +349,7 @@ function addTweet (docTweet){
 
 // Notification 
 async function setNotification (uid,type,from,message,tweet){
-  console.log("inside function")
+  // console.log("inside function")
   const docRef = doc(db, "notification", uid);
   const docSnap = await getDoc(docRef);
   const docUpdate = {
@@ -359,14 +358,14 @@ async function setNotification (uid,type,from,message,tweet){
     message : message,
     tweet : tweet,
   }
-  console.log(docUpdate)
+  // console.log(docUpdate)
   if (docSnap.exists()) {
     // console.log("notification exists");
     // console.log("notificationSnap ", docSnap.data());
     await updateDoc(docRef, {
       noti: arrayUnion(docUpdate)
     }).then(() => {
-      console.log("Updated")
+      // console.log("Updated")
     })
     .catch((error) => {
       console.error("Error writing document: ", error);
@@ -377,7 +376,7 @@ async function setNotification (uid,type,from,message,tweet){
       noti: [docUpdate]
     })
     .then(() => {
-      console.log("Updated")
+      // console.log("Updated")
     })
     .catch((error) => {
       console.error("Error writing document: ", error);

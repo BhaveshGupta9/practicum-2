@@ -6,13 +6,12 @@ import alex from "./alex.jpg";
 
 import {
   //  auth, 
-  setDoc,
-  getDoc,
+ 
   // logout, 
   where,
-  doc,
+  
   db,
-  updateDoc, arrayUnion, arrayRemove
+
   // getDocs,
 } from "../firebase";
 import { collection, query,getDocs } from "firebase/firestore";
@@ -37,7 +36,7 @@ function Chats({ receiver, sender }) {
         setdisplay(doc.data().displayName)
         setuid(doc.id);
       });
-      const a= await getProfileImage(uid).then(data=>setUrl(data.image))
+      await getProfileImage(uid).then(data=>setUrl(data.image))
 
     }
     receiverdata();

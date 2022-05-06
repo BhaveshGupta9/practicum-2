@@ -30,7 +30,7 @@ function CommentBox({receiverId, tweetId,user_email,user_name,tweet, functionCom
   const sendComment = e => {
     e.preventDefault();
 
-    var docRef = dbCollection.collection('comment').add({
+     dbCollection.collection('comment').add({
       displayName: profile.displayName,
       userName: profile.username,
       verified: profile.verified,
