@@ -52,14 +52,8 @@ function Chats({ receiver, sender }) {
   }
 
   return (
-    <button className="btn-profile" onClick={divClick} value={receiver}>
-      <div
-        className="chat-user"
-        style={{
-          height: "50px",
-          width: "100px",
-        }}
-      >
+    <div className="btn-profile" onClick={divClick} value={receiver}>
+      <div className="chat-user">
         <div className="chat-user-name">
           <img
             alt="profile_pic"
@@ -71,7 +65,7 @@ function Chats({ receiver, sender }) {
           <div>{displayname}</div>{" "}
         </div>
       </div>
-    </button>
+    </div>
   );
 }
 
